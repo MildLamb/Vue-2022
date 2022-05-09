@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>初始Vue</title>
+    <!-- v-clock:解决闪烁问题 -->
+    <style>
+        [v-clock]{
+            display: none;
+        }
+    </style>
+    <script type="text/javascript" src="../js/vue.js"></script>
+    <script>
+        window.onload = function() {
+            /**
+             *  初始Vue：
+             *      1. 想让Vue工作，就必须创建一个Vue实例，且要传入一个配置对象
+             *      2. 容器里的代码依旧符合html规范，只不过混入了一些特殊的Vue语法
+             *      3. 容器里的代码被称为 【Vue模板】
+             *      4. Vue实例和容器是一一对应的
+             *      5. 真实开发中只有一个Vue实例，并且会配合着组件一起使用
+             *      6. {{xxx}}中的xxx要是js表达式，且xxx可以自动读取data中的所有属性
+             *      7. 一旦data中的数据发生改变，那么模板中用到该数据的地方也会自动更新
+             *
+             *  注意区分：js表达式 和 js代码(语句)
+             *      1. 表达式：一个表达式会产生一个值，可以放在一个需要值的地方，例如
+             *          (1) a
+             *          (2) a+b
+             *          (3) func(1)
+             *          (4) x == y ? "a" : "b"
+             *
+             *      2. js代码(语句)
+             *          (1) if(){}
+             *          (2) for(){}
+             */
+
+            Vue.config.productionTip = false; //设置为 false 以阻止 vue 在启动时生成生产提示。
+
+            /**
+             * 创建 Vue 实例
+             */
+            new Vue({
+                el: ".demo",  // el 用于指定当前的Vue实例，为哪个容器服务，值通常为css选择器
+                data: {   // data 中用于存储数据，数据供el所指定的容器去使用
+                    name: "kindred",
+                    age: 1500
+                }
+            });
+
+
+             /**
+              * 一个容器被多个Vue实例接管的话
+              * 只有第一个Vue实例接管容器，后面的Vue实例的内容无法生效
+              */
+            /*new Vue({
+                el: ".demo",  // el 用于指定当前的Vue实例，为哪个容器服务，值通常为css选择器
+                data: {   // data 中用于存储数据，数据供el所指定的容器去使用
+                    name: "gnar",
+                    age: 8,
+                    level: 7
+                }
+            });*/
+        };
+    </script>
+</head>
+<body>
+    <!-- 准备好一个容器 -->
+    <!--
+        一个容器被多个Vue实例接管的话
+        只有第一个Vue实例接管容器，后面的Vue实例的内容无法生效
+    -->
+    <div class="demo">
+        <h1>Hello,{{name.toUpperCase()}},{{Date.now()}}</h1>
+    </div>
+
+    <!--
+        两个容器被一个Vue实例接管，后出现的容器不会被Vue解析
+    -->
+    <!--<div class="demo">
+        <h1>Hello,{{name}}</h1>
+    </div>-->
+</body>
+</html>
