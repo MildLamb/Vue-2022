@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>理解MVVM</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="container"><!-- 这里是View -->
+        <h1>姓名:{{name}}</h1>
+        <h1>地址名称:{{local}}</h1>
+        <h1>测试一下：{{1+2}}</h1>
+        <h1>测试一下：{{_isDestroyed}}</h1>
+    </div>
+</body>
+<script>
+    /**
+     * MVVM模型：
+     *  1. M：模型(Model)：data中的数据
+     *  2. V：视图(View)：模板代码
+     *  3. VM：视图模型(ViewModel)：Vue实例
+     *
+     * 观察发现：
+     *  1. data中所有的属性，最后都出现在了vm身上
+     *  2. vm身上所有的属性 及 Vue原型上所有属性，在Vue模板中都可以直接使用
+     */
+    Vue.config.productionTip = false;
+    const vm = new Vue({  // 整个Vue就是 ViewModel
+        el: "#container",
+        data: function () {   // data 是 Model
+            return {
+                name: "kindred",
+                local: "瓦罗兰大陆"
+            }
+        }
+    });
+    console.log(vm);
+</script>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>el和data的两种写法</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <div class="demo">
+        <h1>Hello,{{name.toUpperCase()}},{{Date.now()}}</h1>
+    </div>
+</body>
+<script>
+    /**
+     * el与data有两种写法
+     *  - el的两种写法
+     *      1. new Vue的时候配置el: ""
+     *      2. 先创建Vue实例，随后再通过 xxx.$mount("")指定el绑定的容器
+     *  - data的两种写法
+     *      1. 对象式
+     *      2. 函数式
+     *      如何选择，学习到组件的时候，data就必须使用函数式，否则会报错
+     *  - 一个重要原则
+     *      - 由Vue管理的函数，一定不要写箭头函数，一旦写了箭头函数，this就不再是Vue实例了
+     */
+    /*let v = new Vue({
+        // el: ".demo",  // el的第一种写法
+        data: {   // data 中用于存储数据，数据供el所指定的容器去使用
+            name: "kindred",
+            age: 1500
+        }
+    });*/
+    /**
+     * el的第二种写法
+     */
+    // v.$mount(".demo");
+
+    // --------------------------------------------------------------------
+
+    let v = new Vue({
+        el: ".demo",  // el的第一种写法
+        /*data: {   // data的第一种写法，对象式
+            name: "kindred",
+            age: 1500
+        }*/
+
+        // data的第二种写法：函数式
+        data: function () {
+            console.log("data中的this是",this);  // data中的this是Vue实例对象，即是Vue
+            return {
+                name: "kindred",
+                age: 1500
+            }
+        }
+    });
+</script>
+</html>
