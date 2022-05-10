@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>事件修饰符</title>
+    <style>
+        *{
+            margin-top: 20px;
+        }
+        .s1{
+            height: 50px;
+            background-color: aqua;
+        }
+        .box1{
+            padding: 2px;
+            background-color: aquamarine;
+        }
+        .box2{
+            padding: 2px;
+            background-color: red;
+        }
+        .list{
+            width: 100px;
+            height: 400px;
+            background-color: darkorange;
+            overflow: auto;
+        }
+        li{
+            height: 200px;
+        }
+    </style>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+<div id="container">
+    <!--
+        Vue中的事件修饰符:
+            1. prevent: 阻止默认事件(常用)
+            2. stop：阻止事件冒泡(常用)
+            3. once：事件只触发一次(常用)
+            4. self：只有event.target是当前操作的元素时才触发事件
+            5. capture：使用事件的捕获模式,事件的捕获阶段就开始执行
+            6. passive：事件的默认行为立即执行，无需等待事件回调执行完毕
+    -->
+    <h2>你好呀,{{name}}</h2>
+    <!-- prevent: 阻止默认事件(常用) -->
+    <a href="https://www.bilibili.com" @click.prevent="goTo">点我去B站</a>
+
+
+    <div class="s1" @click="showInfo">
+        <!-- stop：阻止事件冒泡(常用) -->
+        <button @click.stop="showInfo">点我提示信息</button>
+    </div>
+
+
+    <!-- once：事件只触发一次(常用) -->
+    <button @click.once="showInfo">点我提示信息</button>
+
+
+    <!-- 使用事件的捕获模式 -->
+    <div class="box1" @click.capture="showMsg(1)">
+        div1
+        <div class="box2" @click="showMsg(2)">
+            div2
+        </div>
+    </div>
+
+
+    <!-- 只有event.target是当前操作的元素时才触发事件 -->
+    <div class="s1" @click.self="showInfo">
+        <button @click="showInfo">点我提示信息</button>
+    </div>
+
+
+    <!-- passive：事件的默认行为立即执行，无需等待事件回调执行完毕 -->
+    <ul class="list" @wheel="test"> <!--@wheel="test"   这个表示鼠标滚轮事件 scroll是滚动条事件 -->
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+    </ul>
+</div>
+</body>
+<script>
+    const vm = new Vue({
+        el: "#container",
+        data: {
+            name: "kindred"
+        },
+        methods: {
+            goTo(e){
+                alert("同学你好");
+            },
+            showInfo(event) {
+                // alert("我提示下信息");
+                console.log(event.target);
+            },
+            showMsg(msg){
+                console.log(msg);
+            },
+            test(){
+                setTimeout(()=>{
+                    console.log("!");
+                },3000)
+            }
+        }
+    })
+</script>
+</html>

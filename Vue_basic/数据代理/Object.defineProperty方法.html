@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>defineProperty方法</title>
+</head>
+<body>
+
+</body>
+<script>
+    let age = 1500;
+    let role = {
+        name: "kindred",
+        sex: "女"
+        // age: 1500
+    };
+
+    /**
+     *  正常情况，使用defineProperty添加的对象的属性不可被枚举，也不可修改
+     *  - 想要属性可被枚举，添加配置项 enumerable 为true,默认值为false
+     *  - 想要属性可以被修改，添加配置项 writable 为true，默认值为false
+     *  - 通过这种方法添加的属性默认也是无法删除的，想要属性可以被删除，添加配置项 configurable 为true，默认为false
+     */
+    Object.defineProperty(role,"age",{
+        // value: 1500,
+        // enumerable: true,
+        // writable: true,
+        // configurable: true,
+
+        /**
+         * 当有人读取role的age属性时，getter函数就会被调用，且返回值就是age的值
+         */
+        get() {
+            return age;
+        },
+
+        /**
+         * 当有人修改role的age属性时，setter函数就会被调用
+         */
+        set(v) {
+            console.log("有人想修改age的值,想修改为" + v);
+            age = v;
+        }
+    });
+
+    // console.log(Object.keys(role));
+
+    console.log(role);
+</script>
+</html>

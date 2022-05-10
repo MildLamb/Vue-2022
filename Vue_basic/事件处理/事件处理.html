@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>事件处理</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <!--
+        事件的基本使用：
+            1. 使用v-on:xxx 或 @xxx 绑定事件，其中xxx是事件名
+            2. 事件的回调需要配置在methods配置项中，最终会在vm上
+            3. methods中配置的函数，不要使用箭头函数，否则this就不是vm了
+            4. methods中配置的函数，都是被Vue所管理的函数，this指向的是vm或组件实例对象
+            5. @click="method" 和 @click="methods()" 效果是一样，但后者可以传参
+    -->
+    <div id="container">
+        <h2>你好呀,{{name}}</h2>
+        <button v-on:click="showInfo">点我提示信息</button>
+        <!-- v-on: 可以简写为 @ -->
+        <button @click="showInfo2(20,$event,level)">点我提示信息</button>
+    </div>
+</body>
+<script>
+    Vue.config.productionTip = false;
+
+    const vm = new Vue({
+       el: "#container",
+       data: {
+           name: "kindred",
+           level: 7
+       },
+       methods: {
+           showInfo(event){
+               console.log(event);  // PointerEvent
+               console.log(this);   // 此处的this是Vue实例对象
+               alert("纳尔大大大大");
+           },
+           /**
+            * 想给方法传递参数，在调用方法的地方加上括号，里面写上参数
+            * 这里就能在对应位置接收到参数，但此时默认传递的event参数就没了，我们可以使用 $event 占位符来表示需要接收event
+            */
+           showInfo2(y,age,x){
+               alert("千珏多大了" + x);
+           }
+       }
+    });
+</script>
+</html>
