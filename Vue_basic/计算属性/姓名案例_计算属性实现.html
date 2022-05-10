@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>姓名案例_计算属性实现</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="container">
+        <!--
+            计算属性：
+                1. 定义： 要用的属性不存在，要通过已有的属性计算得来
+                2. 原理： 底层借助了Object.defineProperty()方法提供的getter和setter
+                3. get函数什么时候执行?
+                    - 初次读取时会执行一次
+                    - 当依赖的属性发生变化时执行
+                4. 优势： 与methods实现相比，内部有缓存机制
+                5. 备注：
+                    - 计算属性最终会出现在vm上，可以直接使用
+                    - 如果计算属性的值会被修改，那必须为计算属性添加setter方法，且setter中要引起依赖的数据一起发生变化
+        -->
+        姓：<input type="text" v-model="xing"><hr>
+        名：<input type="text" v-model="ming"><br>
+        姓名：<span>{{fullName}}</span>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el: "#container",
+        data: {
+            xing: "kind",
+            ming: "red"
+        },
+        computed: {
+            fullName: {
+                /**
+                 * - computed 中的get中的this还是Vue对象实例
+                 * - 计算属性中存在缓存，多次调用未改变的计算属性，不会重新执行get方法
+                 * - getter 什么时候被调用?
+                 *  1. 初次读取计算属性(这里是fullName)时
+                 *  2. 所依赖的数据发生变化时
+                 */
+                get(){
+                    return this.xing + " - " + this.ming;
+                },
+                /**
+                 * 如果计算属性有可能要修改，就要配置一个setter
+                 * set什么时候被调用? 当计算属性被修改时
+                 */
+                set(v){
+                    const arr = v.split("-");
+                    for (let i = 0;i < arr.length ; i++){
+                        arr[i] = arr[i].trim();
+                    }
+                    this.xing = arr[0];
+                    this.ming = arr[1];
+                }
+            }
+        }
+    });
+
+
+</script>
+</html>

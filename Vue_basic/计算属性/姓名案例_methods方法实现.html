@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>姓名案例_methods方法实现</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="container">
+        姓：<input type="text" v-model="xing"><hr>
+        名：<input type="text" v-model="ming"><br>
+        姓名：<span>{{fullName()}}</span>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el: "#container",
+        data: {
+            xing: "kind",
+            ming: "red"
+        },
+        methods: {
+            fullName(){
+                return this.xing + " - " + this.ming;
+            }
+        }
+    })
+</script>
+</html>

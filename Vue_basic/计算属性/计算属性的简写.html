@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>计算属性的简写</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+<div id="container">
+    姓：<input type="text" v-model="xing"><hr>
+    名：<input type="text" v-model="ming"><br>
+    姓名：<span>{{fullName}}</span>
+</div>
+</body>
+<script>
+    const vm = new Vue({
+        el: "#container",
+        data: {
+            xing: "kind",
+            ming: "red"
+        },
+        computed: {
+            /**
+             * 完整写法
+             */
+            /*fullName: {
+                get(){
+                    return this.xing + " - " + this.ming;
+                },
+                set(v){
+                    const arr = v.split("-");
+                    for (let i = 0;i < arr.length ; i++){
+                        arr[i] = arr[i].trim();
+                    }
+                    this.xing = arr[0];
+                    this.ming = arr[1];
+                }
+            }*/
+            /**
+             * 计算属性简写前提：计算属性只读不改
+             * 简写形式
+             */
+            fullName() {  // 这个function就相当于get方法,调用时只需要用函数名即可，不要加()
+                return this.xing + " - " + this.ming;
+            }
+        }
+    });
+
+
+</script>
+</html>
