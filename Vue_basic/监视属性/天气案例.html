@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>天气属性的变化</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="container">
+        <h2>今天的天气很{{weather}}</h2>
+        <button @click="changeWeather">切换天气</button>
+    </div>
+</body>
+<script>
+    Vue.config.productionTip = false;
+    const vm = new Vue({
+        el: "#container",
+        data: {
+            isHot: true
+        },
+        computed: {
+            weather(){
+                return this.isHot === true ? "炎热":"凉爽";
+            }
+        },
+        methods: {
+            changeWeather(){
+                this.isHot = !this.isHot;
+            }
+        }
+    });
+</script>
+</html>

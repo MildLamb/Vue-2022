@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>监视天气属性的变化</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="container">
+        <hr>
+        <!--
+            深度监视：
+                (1). Vue中的watch默认是不监测对象内部值的改变的，就是说监视一个属性，
+                    但这个属性是一个对象，这个对象中的某个属性改变是不会引起watch执行的，因为对象的地址没变
+                (2). 配置deep:true可以检测对象内部值的变化 (多层级)
+
+            备注：
+                (1). Vue自身可以监测对象内部值的变化，但Vue提供的watch默认不可以
+                (2). 使用watch时根据数据的具体结构，决定是否采用深度监视
+        -->
+        <h3>role1的值为:{{roles.age1}}</h3>
+        <button @click="roles.age1++">点我让age1++</button>
+        <h3>role2的值为:{{roles.age2}}</h3>
+        <button @click="roles.age2++">点我让age2++</button>
+    </div>
+</body>
+<script>
+    Vue.config.productionTip = false;
+    const vm = new Vue({
+        el: "#container",
+        data: {
+            roles: {
+                age1: 1500,
+                age2: 8
+            }
+        },
+        watch: {
+            "roles.age1": {
+                handler(newV, oldV) {
+                    console.log("监视的属性age1发生了变化")
+                }
+            },
+            "roles": {
+                handler(newV,oldV){
+                    console.log("检测的对象中的属性发生了变化");
+                },
+                deep: true
+            }
+
+        }
+    });
+</script>
+</html>
