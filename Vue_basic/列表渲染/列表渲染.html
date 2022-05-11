@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>列表渲染</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="container">
+        <!--
+            v-for 指令：
+                1. 用于展示列表数据
+                2. 语法：v-for="(item,index) in items" :key="xxx"
+                3. 可遍历：数组，对象，字符串，指定次数
+        -->
+        <h2>角色遍历</h2>
+        <ul>
+            <li v-for="(role,index) in roles" :key="role.id">{{role.name}} --- {{role.age}} -- {{index}}</li>
+        </ul>
+
+        <h2>对象属性遍历</h2>
+        <ul>
+            <li v-for="(value,k) in champion" :key="k">{{k}}:{{value}}</li>
+        </ul>
+
+        <h2>字符串遍历</h2>
+        <ul>
+            <li v-for="(char,index) in str" :key="index">{{index}}:{{char}}</li>
+        </ul>
+
+        <h2>指定次数遍历</h2>
+        <ul>
+            <li v-for="(num,index) in 5" :key="index">{{num}}:{{index}}</li>
+        </ul>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+       el: "#container",
+       data: {
+           roles: [
+               {
+                   id: "001",
+                   name: "kindred",
+                   age: 1500
+               },
+               {
+                   id: "002",
+                   name: "gnar",
+                   age: 8
+               },
+               {
+                   id: "003",
+                   name: "neeko",
+                   age: 16
+               }
+           ],
+           champion: {
+               name: "kindred",
+               age: 1500,
+               level: 7
+           },
+           str: "Hello,World"
+       }
+    });
+</script>
+</html>

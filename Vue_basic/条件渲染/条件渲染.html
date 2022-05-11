@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>条件渲染</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="container">
+        <!--
+            条件渲染：
+                1. v-if
+                    写法：
+                        (1). v-if="表达式"
+                        (2). v-else-if="表达式"
+                        (3). v-else="表达式"
+                    适用于：切换频率较低的场景
+                    特点：判断失败的DOM元素会直接移除
+                    注意：v-if可以和v-else，v-else-if一起使用，但要求结构不能被打断
+
+                2. v-show
+                    写法：
+                        v-show="表达式"
+                    适用于：切换频率较高的场景
+                    特点：不展示的DOM元素未被移除，仅仅只是使用样式隐藏
+
+                3. 备注：使用v-if的时候，元素可能无法获取到，而v-show一定可以获取到，因为v-if是直接删除元素
+        -->
+
+
+        <h2>当前的show值为:{{show}}</h2>
+        <button @click="show++">点我show+1</button>
+        <!-- 使用 v-show 做条件渲染 -->
+<!--        <h2 v-show="show">你好鸭,{{name}}</h2>-->
+        <!-- 使用 v-if 做条件渲染 -->
+<!--        <h2 v-if="show">你好鸭,{{name}}</h2>-->
+
+        <!-- v-else 和 v-else-if
+            最后的 v-else 是不要加判断条件的，加了也没用
+            v-else-if的判断要求连续，不能被打断
+         -->
+        <div v-if="show === 1">Kindred</div>
+        <div v-else-if="show === 2">Gnar</div>
+        <div v-else>Neeko</div>
+
+        <!-- template在渲染的时候不会占位置
+            但只能配合 v-if 使用，不能配合 v-show 使用
+         -->
+        <template v-if="show === 1">
+            <div>Kindred</div>
+            <div>Gnar</div>
+            <div>Neeko</div>
+        </template>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+       el: "#container",
+       data: {
+           name: "kindred",
+           show: 0
+       }
+    });
+</script>
+</html>

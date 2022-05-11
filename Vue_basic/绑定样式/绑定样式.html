@@ -41,6 +41,9 @@
         <br><br>
         <!-- 适用场景：要绑定的样式个数确定，名字不确定,只是动态决定是否启用  -->
         <div class="basic" :class="styleObj" @click="changeMood">{{name}}</div>
+
+        <!-- 使用:style来绑定样式 -->
+        <div class="basic" :style="SObj">{{name}}</div>
     </div>
 </body>
 <script type="text/javascript">
@@ -50,9 +53,14 @@
            name: "kindred",
            nowMood: "sad",
            styleArr: ["s1","s2","s3"],
-           styleObj:{
+           styleObj: {
                s1: true,
                s2: false
+           },
+           SObj: {
+               // 这里面的键不能乱写，通过css的驼峰命名属性
+               fontSize: "30px",
+               color: "yellow"
            }
        },
         methods: {
