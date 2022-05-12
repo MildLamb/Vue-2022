@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue监测数据变化的原理</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="container">
+        <!--
+            Vue监视数据的原理：
+                1. vue会监视data中所有层次的数据
+
+                2. 如何监测对象中的数据?
+                    通过setter实现监视，且要在new Vue时就要传入要监测的数据。
+                    (1). 对象中后追加的属性，Vue默认是不做响应式处理的
+                    (2). 如需给后添加的属性做响应式，可以使用如下API：
+                        Vue.set(target,propertyName/index,value)        propertyName要用引号 index不需要
+                   or   vm.$set(target,propertyName/index,value)
+
+                3. 如何监测数据中的数据?
+                    通过包裹数组更新元素的方法实现，本质就是做了两件事：
+                    (1). 调用原生对应的方法对数组进行更新
+                    (2). 重新解析模板，进行页面更新
+
+                4. 在Vue修改数组中的元素一定要用如下方法：
+                    (1). 使用这些API：push(),pop(),shift(),unshift(),splice(),sort(),reverse(),前面这些都是可以对原数组产生影响的方法;
+                         变更方法，顾名思义，会变更调用了这些方法的原始数组。相比之下，也有非变更方法，例如 filter()、concat() 和 slice().
+                         它们不会变更原始数组，而总是返回一个新数组。当使用非变更方法时，可以用新数组替换旧数组.
+                    (2). Vue.set(target,index,value) or vm.$set(target,index,value)
+
+                特别注意：Vue.set 和 vm.$set() 不能给 vm 或 vm的根数据对象(data或者说是_data) 添加属性!!!!!!!!
+        -->
+
+        <button @click="role.age.rage++">年龄+1岁</button><br/>
+        <button @click="addSex">添加性别属性，默认值为女</button><br/>
+        <button @click="addFriend">在列表首位添加一个朋友为：qsj</button><br/>
+        <button @click="fixFriend">修改第一个朋友的名字为：友人</button><br/>
+        <button @click="addHobby">添加一个爱好</button><br/>
+        <button @click="fixHobby">修改第一个爱好为：play</button><br/>
+
+        <hr>
+        <h3>喜欢的人物：{{role.name}}</h3>
+        <h3 v-if="role.sex">性别：{{role.sex}}</h3>
+        <h3>背景年龄: {{role.age.rage}} , 看上去的年龄：{{role.age.sage}}</h3>
+        <hr>
+        <h2>爱好</h2>
+        <ul>
+            <li v-for="(h,index) in role.hobby" :key="index">{{h}}</li>
+        </ul>
+        <h2>朋友们</h2>
+        <ul>
+            <li v-for="(friend,index) in role.friends" :key="index">{{friend.name}} -- {{friend.age}}</li>
+        </ul>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el: "#container",
+        data: {
+            role: {
+                name: "kindred",
+                age: {
+                    rage: 1500,
+                    sage: 18
+                },
+                hobby: ["game","study","music"],
+                friends: [
+                    {
+                        name: "ganr",
+                        age: 8
+                    },{
+                        name: "neeko",
+                        age: 16
+                    }
+                ]
+            }
+        },
+        methods: {
+            addSex(){
+                this.$set(this.role,"sex","女");
+            },
+            addFriend(){
+                this.role.friends.unshift({name: "qsj",age: 23});
+            },
+            fixFriend(){
+                this.role.friends[0].name = "友人";
+            },
+            addHobby(){
+                // this.role.hobby.push("fight");
+                this.$set(this.role.hobby,this.role.hobby.length,"fight");
+            },
+            fixHobby(){
+                this.role.hobby.splice(0,1,"play");
+                // this.$set(this.role.hobby,0,"play");
+            }
+        }
+    });
+</script>
+</html>

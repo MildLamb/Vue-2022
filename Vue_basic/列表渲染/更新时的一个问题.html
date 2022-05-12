@@ -50,11 +50,7 @@
                 // this.roles[0].age = 1600;   // 可行
 
                 // 下面这种方法，数据改了，但是Vue监测不到
-                this.roles[0] = {
-                    id: "001",
-                    name: "十玑",
-                    age: 1550
-                }
+                this.roles.splice(0,1,{id: "001",name: "千珏",age: 1600});
             }
         }
     });

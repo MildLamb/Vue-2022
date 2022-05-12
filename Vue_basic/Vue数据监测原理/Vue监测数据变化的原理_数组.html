@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue监测数据变化的原理</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="container">
+        <!--
+            Vue.set(target,key,val) 方法有局限性
+                - target不能是Vue实例，或者Vue实例的根数据对象， vm / vm._data
+        -->
+        <h2>角色名称：{{name}}</h2>
+        <h2>角色大区：{{local}}</h2>
+        <h2>Master：</h2>
+        <hr>
+        <button @click="addSex">点击添加性别属性</button>
+        <h3>喜欢的人物：{{role.name}}</h3>
+        <h3 v-if="role.sex">性别：{{role.sex}}</h3>
+        <h3>背景年龄: {{role.age.rage}} , 看上去的年龄：{{role.age.sage}}</h3>
+        <hr>
+        <h2>爱好</h2>
+        <ul>
+            <li v-for="(h,index) in role.hobby" :key="index">{{h}}</li>
+        </ul>
+        <h2>朋友们</h2>
+        <ul>
+            <li v-for="(friend,index) in role.friends" :key="index">{{friend.name}} -- {{friend.age}}</li>
+        </ul>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el: "#container",
+        data: {
+            name: "千青灵花王玉瓷间",
+            local: "祖安",
+            role: {
+                name: "kindred",
+                age: {
+                    rage: 1500,
+                    sage: 18
+                },
+                hobby: ["game","study","music"],
+                friends: [
+                    {
+                        name: "ganr",
+                        age: 8
+                    },{
+                        name: "neeko",
+                        age: 16
+                    },{
+                        name: "qsj",
+                        age: 23
+                    }
+                ]
+            }
+        },
+        methods: {
+            addSex(){
+                /**
+                 * methods 中的this 是vm对象，如果用this添加响应式属性 就是 this.$set() 或者 Vue.set()
+                 * 此方法也可以适用于数据中某一个元素值的修改
+                 */
+                this.$set(this.role,"sex","女");
+            }
+        }
+    });
+</script>
+</html>
