@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>列表过滤</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="container">
+        <h2>角色遍历</h2>
+        <input type="text" placeholder="请输入" v-model="keyWord">
+        <ul>
+            <li v-for="(role,index) in resultRoles" :key="role.id">{{role.name}} --- {{role.age}}</li>
+        </ul>
+    </div>
+</body>
+<script>
+    /**
+     * 用监视属性watch实现列表过滤(搜索栏)
+     */
+/*    const vm = new Vue({
+       el: "#container",
+       data: {
+           keyWord: "",
+           roles: [
+               {
+                   id: "001",
+                   name: "马冬梅",
+                   age: 1500
+               },
+               {
+                   id: "002",
+                   name: "周东雨",
+                   age: 8
+               },
+               {
+                   id: "003",
+                   name: "周杰伦",
+                   age: 16
+               },
+               {
+                   id: "004",
+                   name: "扁嘴伦",
+                   age: 16
+               }
+           ],
+           resultRoles: []
+       },
+        watch: {
+           keyWord:{
+               handler(newValue){
+                   this.resultRoles = this.roles.filter((r) => {
+                       return r.name.indexOf(newValue) === -1 ? false : true;
+                   });
+               },
+               immediate: true
+           }
+        }
+    });*/
+
+    /**
+     * 用计算属性computed实现列表过滤
+     */
+    const vm = new Vue({
+        el: "#container",
+        data: {
+            keyWord: "",
+            roles: [
+                {
+                    id: "001",
+                    name: "马冬梅",
+                    age: 1500
+                },
+                {
+                    id: "002",
+                    name: "周东雨",
+                    age: 8
+                },
+                {
+                    id: "003",
+                    name: "周杰伦",
+                    age: 16
+                },
+                {
+                    id: "004",
+                    name: "扁嘴伦",
+                    age: 16
+                }
+            ]
+        },
+        computed: {
+            resultRoles(){
+                return this.roles.filter((r)=>{
+                    return r.name.indexOf(this.keyWord) !== -1;
+                })
+            }
+        }
+    });
+</script>
+</html>

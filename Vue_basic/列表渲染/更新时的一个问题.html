@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>列表过滤，更新时的一个问题</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="container">
+        <h2>角色遍历</h2>
+        <button @click="updateK">更新千珏的信息</button>
+        <ul>
+            <li v-for="(role,index) in roles" :key="role.id">{{role.name}} --- {{role.age}}</li>
+        </ul>
+    </div>
+</body>
+<script>
+    /**
+     * 用计算属性computed实现列表过滤
+     */
+    const vm = new Vue({
+        el: "#container",
+        data: {
+            roles: [
+                {
+                    id: "001",
+                    name: "kindred",
+                    age: 1500
+                },
+                {
+                    id: "002",
+                    name: "gnar",
+                    age: 8
+                },
+                {
+                    id: "003",
+                    name: "neeko",
+                    age: 16
+                },
+                {
+                    id: "004",
+                    name: "qsj",
+                    age: 23
+                }
+            ]
+        },
+        methods: {
+            updateK(){
+                // this.roles[0].name = "千珏";  // 可行
+                // this.roles[0].age = 1600;   // 可行
+
+                // 下面这种方法，数据改了，但是Vue监测不到
+                this.roles[0] = {
+                    id: "001",
+                    name: "十玑",
+                    age: 1550
+                }
+            }
+        }
+    });
+</script>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue监测数据变化的原理</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="container">
+        <!--
+            Vue.set(target,key,val) 方法有局限性
+                - target不能是Vue实例，或者Vue实例的根数据对象， vm / vm._data
+        -->
+        <h2>角色名称：{{name}}</h2>
+        <h2>角色大区：{{local}}</h2>
+        <h2>Master：</h2>
+        <hr>
+        <button @click="addSex">点击添加性别属性</button>
+        <h3>喜欢的人物：{{role.name}}</h3>
+        <h3 v-if="role.sex">性别：{{role.sex}}</h3>
+        <h3>背景年龄: {{role.age.rage}} , 看上去的年龄：{{role.age.sage}}</h3>
+        <hr>
+        <h2>朋友们</h2>
+        <ul>
+            <li v-for="(friend,index) in role.friends" :key="index">{{friend.name}} -- {{friend.age}}</li>
+        </ul>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el: "#container",
+        data: {
+            name: "千青灵花王玉瓷间",
+            local: "祖安",
+            role: {
+                name: "kindred",
+                /**
+                 * 现在有个场景，我发布后，发现需要再向vm中添加新的属性，例如为vm中的role属性对象中添加sex属性
+                 * 如果通过，vm._data.role.sex = "女"  的方式去添加，vm是不会为新的sex属性添加响应式的，即没有getter和setter的
+                 *
+                 * 需要使用Vue的一个api，Vue.set(target       ,key   ,val)
+                 *                                |           |      |
+                 *                         vm._data.role   "sex"   "女"
+                 *
+                 * Vue.set(vm._data.role,"sex","女")  或者 vm.$set(vm._data.role,"sex","女")
+                 */
+                age: {
+                    rage: 1500,
+                    sage: 18
+                },
+                friends: [
+                    {
+                        name: "ganr",
+                        age: 8
+                    },{
+                        name: "neeko",
+                        age: 16
+                    },{
+                        name: "qsj",
+                        age: 23
+                    }
+                ]
+            }
+        },
+        methods: {
+            addSex(){
+                /**
+                 * methods 中的this 是vm对象，如果用this添加响应式属性 就是 this.$set() 或者 Vue.set()
+                 */
+                this.$set(this.role,"sex","女");
+            }
+        }
+    });
+</script>
+</html>

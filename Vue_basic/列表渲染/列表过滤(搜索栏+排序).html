@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>列表过滤</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="container">
+        <h2>角色遍历</h2>
+        <input type="text" placeholder="请输入" v-model="keyWord">
+        <button @click="sortType = 1">年龄升序</button>
+        <button @click="sortType = -1">年龄降序</button>
+        <button @click="sortType = 0">默认顺序</button>
+        <ul>
+            <li v-for="(role,index) in resultRoles" :key="role.id">{{role.name}} --- {{role.age}}</li>
+        </ul>
+    </div>
+</body>
+<script>
+    /**
+     * 用计算属性computed实现列表过滤
+     */
+    const vm = new Vue({
+        el: "#container",
+        data: {
+            keyWord: "",
+            sortType: 0,  // 使用数字代表排序方式
+            roles: [
+                {
+                    id: "001",
+                    name: "kindred",
+                    age: 1500
+                },
+                {
+                    id: "002",
+                    name: "gnar",
+                    age: 8
+                },
+                {
+                    id: "003",
+                    name: "neeko",
+                    age: 16
+                },
+                {
+                    id: "004",
+                    name: "qsj",
+                    age: 23
+                }
+            ]
+        },
+        computed: {
+            resultRoles(){
+                const roleArr = this.roles.filter((r)=>{
+                    return r.name.indexOf(this.keyWord) !== -1;
+                });
+                // 判断一下是否要排序
+                if (this.sortType){
+                    roleArr.sort((r1,r2) => {
+                        return this.sortType === 1 ? r1.age - r2.age : r2.age - r1.age;
+                    });
+                    return roleArr;
+                } else {
+                    return roleArr;
+                }
+            }
+        }
+    });
+</script>
+</html>

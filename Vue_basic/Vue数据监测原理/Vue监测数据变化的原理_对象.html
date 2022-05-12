@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue监测数据变化的原理</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="container">
+        <h2>角色名称：{{name}}</h2>
+        <h2>角色大区：{{local}}</h2>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el: "#container",
+        data: {
+            name: "千青灵花王玉瓷间",
+            local: "祖安",
+            role: {
+                name: "kindred",
+                age: 1500
+            }
+        }
+    });
+</script>
+</html>
