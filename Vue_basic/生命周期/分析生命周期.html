@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>分析生命周期</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="container">
+        <h2>当前n值为：{{n}}</h2>
+        <button @click="add">点我n+1</button>
+        <button @click="destroyVm">点我销毁vm</button>
+    </div>
+</body>
+<script>
+    Vue.config.productionTip = false;
+    const vm = new Vue({
+        el: "#container",
+        // template:`
+        //     <div>
+        //         <h2>当前n值为：{{n}}</h2>
+        //         <button @click="add">点我n+1</button>
+        //     </div>
+        // `,
+        data: {
+            n: 2022
+        },
+        methods: {
+            add(){
+                console.log("add");
+                this.n++;
+            },
+            destroyVm(){
+                console.log("vm已被销毁");
+                this.$destroy();
+            }
+        },
+        watch: {
+            n: {
+                handler(newValue,oldValue){
+                    console.log("n的旧值是：" + oldValue + ",n的新值为：" + newValue);
+                }
+            }
+        },
+        beforeCreate(){
+            console.log("beforeCreate被调用");
+        },
+        created(){
+            console.log("created被调用");
+        },
+        beforeMount(){
+            console.log("beforeMount被调用");
+        },
+        mounted(){
+            console.log("mounted被调用");
+        },
+        beforeUpdate(){
+            console.log("beforeUpdate被调用");
+        },
+        updated(){
+            console.log("updated被调用");
+            this.n = 99;
+        },
+        beforeDestroy(){
+            console.log("beforeDestroy被调用");
+            // console.log(this.n);
+            this.add();
+        },
+        destroyed(){
+            console.log("destroy被调用");
+        }
+    });
+</script>
+</html>
