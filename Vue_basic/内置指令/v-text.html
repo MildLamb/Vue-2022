@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>v-text</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <!--
+        我们已知的指令：
+            v-bind: 单向绑定解析表达式，可简写为 :xxx
+            v-model: 数据双向绑定
+            v-for: 遍历数组/对象/字符串
+            v-on: 绑定事件监听，可简写为@
+            v-if: 条件渲染(动态控制节点是否存在)
+            v-else: 条件渲染(动态控制节点是否存在)
+            v-show: 条件渲染(动态控制节点是否展示)
+    -->
+    <div id="container">
+        <div>你好，{{name}}</div>
+        <div v-text="name"></div>
+        <!-- v-text不会解析标签 -->
+        <div v-text="str"></div>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el: "#container",
+        data: {
+            name: "kindred",
+            str: "<h3>哈哈哈</h3>"
+        }
+    });
+</script>
+</html>

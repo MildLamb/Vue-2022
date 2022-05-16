@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>自定义指令</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <!--
+        需求1：定义一个v-big指令，和v-text功能类似，但会把绑定的数值放大10倍
+        需求2：定义一个v-fbind指令，和v-bind功能类似，但可以让其所绑定的input元素默认获取焦点
+    -->
+    <div id="container">
+        <h2>当前的n值是:<span v-text="n"></span></h2>
+<!--        <h2>方法10倍的n值是:<span v-big="n"></span></h2>-->
+
+        <h2>方法10倍的n值是:<span v-big-number="n"></span></h2>
+        <button @click="n++">点击n++</button>
+        <hr>
+        <input type="text" v-fbind="n">
+    </div>
+    <div id="container2">
+        <input type="text" v-fbind="n">
+    </div>
+</body>
+<script>
+    Vue.config.productionTip = false;
+
+    /**
+     * 配置全局的自定义指令(对象式)
+     */
+    Vue.directive("fbind",{
+        // 指令与元素成功绑定时
+        bind(element,binding){
+            element.value = "1902524390";
+        },
+        // 指令所在元素被插入页面时
+        inserted(element,binding){
+            element.focus();
+        },
+        // 指令所在的模板被重新解析时
+        update(element,binding){
+            element.value = binding.value;
+        }
+    });
+    /**
+     * 配置全局的自定义指令(函数式)
+     */
+    Vue.directive("big",function(element,binding){
+        element.innerText = binding.value * 10;
+    });
+
+
+
+
+    const vm = new Vue({
+       el: "#container",
+       data: {
+           n: 2022
+       },
+        /**
+         * 自定义指令的配置项
+         */
+        directives: {
+            /**
+             * @param element 你绑定的html元素
+             * @param binding 你的自定义指令
+             *
+             * 自定义指令何时被调用？(函数形式书写的情况)
+             *      1. 指令与元素成功绑定时
+             *      2. 指令所在的模板被重新解析时
+             *
+             * 特别注意：
+             *      directives中的this是window对象，而不是vm
+             */
+            "big-number"(element,binding){
+                element.innerText = binding.value * 10;
+            },
+            fbind: {
+                // 指令与元素成功绑定时
+                bind(element,binding){
+                    element.value = "1216982545";
+                },
+                // 指令所在元素被插入页面时
+                inserted(element,binding){
+                    element.focus();
+                },
+                // 指令所在的模板被重新解析时
+                update(element,binding){
+                    element.value = binding.value;
+                }
+            }
+        }
+    });
+
+    const vm2 = new Vue({
+       el: "#container2",
+       data: {
+           n: 2077
+       }
+    });
+</script>
+</html>

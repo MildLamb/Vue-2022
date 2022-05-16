@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>自定义指令总结</title>
+</head>
+<body>
+<!--
+    自定义指令总结：
+        1. 定义语法：
+            (1). 局部指令：
+                new Vue({                                                           new Vue({
+                    directives:{                                                        directives:{
+                        xxx: {                                                               xxx(element,binding){
+                            钩子函数名称(element,binding){          或                             业务代码
+                                   业务代码                                                  }
+                            },钩子函数名称(element,binding){                              }
+                                   业务代码                                          }
+                            }
+                        }
+                    }
+                })
+
+            (2). 全局指令：
+                Vue.directive("指令名",配置对象)   或者  Vue.directive("指令名",回调函数)
+
+        2. 配置对象中常用的3个回调
+            (1). bind: 指令与元素成功绑定时调用
+            (2). inserted: 指令所在元素被插入页面时调用
+            (3). update: 指令所在模板结构被重新解析时调用
+
+        3. 备注：
+            - 指令定义时不加 v- ，但在使用时要加 v-
+            - 指令名如果是多个单词，要使用 kebab-case 命名方式，而不能用 camelCase 命名方式
+-->
+</body>
+</html>
