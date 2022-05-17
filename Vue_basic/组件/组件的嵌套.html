@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>组件的嵌套</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="container">
+        <app></app>
+    </div>
+</body>
+<script>
+    // 定义组件
+    const wel = {
+        template: `
+            <h1>{{welMsg}}</h1>
+        `,
+        data(){
+            return {
+                welMsg: "欢迎来到绽灵节！"
+            }
+        }
+    };
+
+    const role = {
+        template: `
+            <div>
+                <h2>角色姓名：{{name}}</h2>
+                <h2>角色年龄：{{age}}</h2>
+            </div>
+        `,
+        data(){
+            return {
+                name: "kindred",
+                age: 1500
+            }
+        }
+    };
+
+    const master = {
+        template: `
+            <div>
+                <h2>姓名：{{name}}</h2>
+                <h2>年龄：{{age}}</h2>
+                <role></role>
+            </div>
+        `,
+        data() {
+            return {
+                name: "QSJ",
+                age: 23
+            };
+        },
+        components: {
+            role
+        }
+    };
+
+    // 定义一个上级组件 app
+    const app = {
+        template: `
+            <div>
+                <wel></wel>
+                <master></master>
+            </div>
+        `,
+        components: {
+            wel,
+            master
+        }
+    };
+
+    new Vue({
+        el: "#container",
+        data: {
+
+        },
+        components: {
+            app
+        }
+    });
+</script>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>非单文件组件</title>
+    <script>
+        /**
+         * 非单文件组件：
+         *      一个文件中包含有n个组件
+         */
+    </script>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <!--
+        Vue中使用组件的三大步骤：
+            1. 定义组件(创建组件)
+            2. 注册组件
+            3. 使用组件(组件名标签)
+
+        一. 如何定义一个组件？
+            使用Vue.extend(options)创建，其中options和new Vue(options)时传入的那个options几乎一样，但区别如下：
+                1. el不要写：为什么？ ---- 最终所有的组件都要经过一个vm管理，由vm中的el决定服务哪个容器
+                2. data必须要写成函数，为什么？ ---- 避免组件被复用时，数据存在引用关系，造成数据安全问题
+            备注：使用template可以配置组件结构
+
+        二. 如何注册组件？
+            1. 局部注册：靠new Vue的时候传入components配置项
+            2. 全局注册：在组件定义完后，使用Vue.component("组件名",组件)
+
+        三. 使用组件，用组件名的标签
+            <xxx></xxx>
+    -->
+    <div id="container">
+        <welcome></welcome>
+        <h1>{{msg}}</h1>
+        <!-- 3. 使用组件标签 -->
+        <account></account>
+        <hr>
+        <!-- 3. 使用组件标签 -->
+        <champion></champion>
+    </div>
+    <div id="container2">
+        <welcome></welcome>
+    </div>
+</body>
+<script>
+    Vue.config.productionTip = false;
+
+
+    /**
+     * 1. 创建组件
+     */
+    const user = Vue.extend({
+        // el: "#container",  // 组件定义时，一定不要写el配置项，因为最终所有的组件都要被一个vm管理，由vm决定最终服务给哪个容器
+        data(){
+            return {
+                userName: "EngulfMissing",
+                location: "HNCZ"
+            }
+        },
+        template:`
+            <div>
+                <h2>用户名称: {{userName}}</h2>
+                <h2>角色地址: {{location}}</h2>
+                <button @click="getInfo">点我提示用户名</button>
+            </div>
+        `,
+        methods: {
+            getInfo(){
+                alert(this.userName);
+            }
+        }
+    });
+
+    const role = Vue.extend({
+        data(){
+            return {
+                roleName: "kindred",
+                level: 7
+            }
+        },
+        template: `
+            <div>
+                <h2>角色名称: {{roleName}}</h2>
+                <h2>角色熟练度: {{level}}</h2>
+            </div>
+        `
+    });
+
+    const hello = Vue.extend({
+       data(){
+           return {
+               wel: "欢迎学习Vue组件"
+           }
+       },
+        template: `
+            <div>
+                <h1>{{wel}}</h1>
+            </div>
+        `
+    });
+
+    /**
+     * 注册组件(全局注册),全局注册必须要在组件定义的后面，现有组件才能注册
+     */
+    Vue.component("welcome",hello);
+
+
+
+    /**
+     * 2. 注册组件(局部注册)
+     */
+    const vm = new Vue({
+        el: "#container",
+        data: {
+          msg: "千珏你好鸭"
+        },
+        // 注册组件
+        components: {
+            account: user,
+            champion: role
+        }
+    });
+
+    const vm2 = new Vue({
+       el: "#container2",
+    });
+</script>
+</html>

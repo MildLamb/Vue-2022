@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VueComponent构造函数</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <!--
+        关于VueComponent
+            1. 组件的本质是一个名为VueComponent的构造函数，并不是程序员定义的，是Vue.extend生产的.
+
+            2. 我们只需要写<xxx></xxx> 或 <xxx/>，Vue解析时会帮我们创建xxx组件的实例对象，即Vue
+            帮我们执行的： new VueComponent(options)
+
+            3. 特别注意：每次调用Vue.extend.返回的都是一个全新的VueComponent ！！！
+
+            4. 关于this指向：
+                (1). new Vue(options)配置中：
+                    data函数，methods中的函数，watch中的函数，computed中的函数，它们的this均是【Vue实例对象】
+                (2). 组件配置中：
+                    data函数，methods中的函数，watch中的函数，computed中的函数，它们的this均是【VueComponent实例对象】
+
+            5. VueComponent的实例对象，简称为vc (也可称之为：组件实例对象)
+               Vue的实例对象：以后简称为vm
+    -->
+    <div id="container">
+        <role></role>
+        <wel></wel>
+    </div>
+</body>
+<script>
+    Vue.config.productionTip = false;
+    const role = {
+        template: `
+            <div>
+                <h2>角色名称：{{name}}</h2>
+                <h2>角色年龄：{{age}}</h2>
+                <button @click="show">点我显示角色名称</button>
+            </div>
+        `,
+        data(){
+            return {
+                name: "kindred",
+                age: 1500
+            }
+        },methods: {
+            show(){
+                console.log(this);
+            }
+        }
+    };
+
+    const wel = Vue.extend({
+        template: `<h1>{{msg}}</h1>`,
+        data(){
+            return {
+                msg: "你好鸭！"
+            }
+        }
+    });
+
+    const vm = new Vue({
+        el: "#container",
+        data: {
+
+        },
+        components: {
+            role,
+            wel
+        }
+    });
+
+    /*console.log(role);
+    console.log(wel);*/
+    console.log(vm);
+</script>
+</html>
