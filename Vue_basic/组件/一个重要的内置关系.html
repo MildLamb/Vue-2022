@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>一个重要的内置关系</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <!--
+        1. 一个重要的内置关系： VueComponent.prototype.__proto__ === Vue.prototype
+        2. 为什么要有这个关系：让组件实例对象(vc)也可以访问到Vue原型对象上的属性和方法
+    -->
+    <div id="container">
+        <user></user>
+    </div>
+</body>
+<script>
+    Vue.config.productionTip = false;
+
+    const user = Vue.extend({
+        // el: "#container",  // 组件定义时，一定不要写el配置项，因为最终所有的组件都要被一个vm管理，由vm决定最终服务给哪个容器
+        data(){
+            return {
+                userName: "EngulfMissing",
+                location: "HNCZ",
+            }
+        },
+        template:`
+            <div>
+                <h2>用户名称: {{userName}}</h2>
+                <h2>角色地址: {{location}}</h2>
+                <button @click="getInfo">点我提示用户名</button>
+            </div>
+        `,
+        methods: {
+            getInfo(){
+                alert(this.x);
+            }
+        }
+    });
+
+
+    new Vue({
+        el: "#container",
+        data: {
+            msg: "你好"
+        },
+        components: {
+            user
+        }
+    });
+
+    /**
+     * 给Vue的原型对象中添加属性，看VueComponent是否也能获取到
+     */
+    Vue.prototype.x = 2022;
+
+    console.log(user);
+    console.log(user.prototype.__proto__ === Vue.prototype);
+
+
+    // 定义一个构造函数
+    function Demo() {
+        this.a = 1;
+        this.b = 2;
+    }
+
+    console.log(Vue);
+    // 创建一个Demo的实例对象
+/*    const d = new Demo();
+    console.log(Demo.prototype); // 显式原型属性
+    console.log(d.__proto__)  // 隐式原型属性
+
+    // 程序员通过显式原型属性操作原型对象，追加一个x属性，值为99
+    Demo.prototype.x = 99;
+    console.log(d.__proto__.x);*/
+</script>
+</html>
