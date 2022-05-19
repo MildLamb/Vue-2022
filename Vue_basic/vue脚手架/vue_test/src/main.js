@@ -21,6 +21,6 @@ Vue.use(plugins);
 
 
 // 创建Vue实例
-new Vue({
+const vm = new Vue({
     render: h => h(App)
 }).$mount("#container");

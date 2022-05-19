@@ -9,6 +9,10 @@ npm uninstall -g @vue/cli
 ```text
 npm install -g @vue/cli@4.5.13
 ```
+- 查看脚手架历史版本
+```text
+npm view @vue/cli versions
+```
 
 ## 脚手架文件结构
 ```text
@@ -94,3 +98,6 @@ export {min};
       1. 全局混入：Vue.mixin(xxx)
       2. 局部混入：mixins: []
       
+## 插件
+- 功能：用于增强Vue
+- 本质：包含install方法的一个对象，install的第一个参数是Vue，第二个以后的参数是插件使用者传递的数据
