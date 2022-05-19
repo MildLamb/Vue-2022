@@ -1,5 +1,15 @@
 # 脚手架笔记
 
+## 安装vue脚手架
+- 卸载命令
+```text
+npm uninstall -g @vue/cli
+```
+- 安装命令
+```text
+npm install -g @vue/cli@4.5.13
+```
+
 ## 脚手架文件结构
 ```text
 |—— node_modules  
@@ -34,3 +44,53 @@
    <h1 ref="xxx">...</h1> 或 <Master ref="xxx"></Master>
    ```
    - 获取：this.$refs.xxx
+
+## 配置项props
+功能：让组件接收外部传过来的数据
+(1). 传递数据：  
+```text
+<Demo yourPropName="xxx"/>
+```
+
+(2). 接收数据：
+```vue
+props: ["name","age"] // 简单声明接收
+
+// 接收的同时对数据类型进行限制
+/*props: {
+  name: String,
+  age: Number
+}*/
+
+// 接收的同时对数据进行类型限制，以及默认值，必要性的限制
+/*props: {
+  name: {
+      type: String,   // name的类型
+      required: true  // name是必要的
+  },
+  age: {
+      type: Number,
+      default: "?"
+  }
+}*/
+```
+
+## mixin(混入)
+- 功能：可以把多个组件共用的配置提取成一个混入对象
+- 使用方式：
+  1. 定义混入：
+```text
+const min = {
+    data(){
+        return {};
+    }
+},
+methods: {
+}
+
+export {min};
+```
+   2. 使用混入
+      1. 全局混入：Vue.mixin(xxx)
+      2. 局部混入：mixins: []
+      

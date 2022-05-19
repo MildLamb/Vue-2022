@@ -1,32 +1,22 @@
 <template>
     <div>
-        <h1 v-text="msg" ref="title"></h1>
-        <button @click="showDom" ref="btn">点我显式上方DOM</button>
         <Master ref="master"></Master>
-        <Role></Role>
+<!--        <Role name="kindred" :age="1500"></Role>
+        <Role name="gnar" :age="8"></Role>-->
+<!--        <User></User>-->
     </div>
 </template>
 
 <script>
 import Master from "@/components/Master";
 import Role from "@/components/Role";
+import User from "@/components/User";
 export default {
     name: "App",
     components: {
         Master,
-        Role
-    },
-    data(){
-        return {
-            msg: "欢迎光临!"
-        }
-    },
-    methods: {
-        showDom(){
-            console.log(this.$refs.title);
-            console.log(this.$refs.btn);
-            console.log(this.$refs.master);
-        }
+        Role,
+        User
     }
 }
 </script>
