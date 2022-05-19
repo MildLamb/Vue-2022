@@ -7,12 +7,12 @@
 
 <script>
     export default {
-        name: "Master",
+        name: "MyMaster",
         data(){
-          return {
-            name: "EngulfMissing",
-            age: 23
-          }
+            return {
+                name: "QSJ",
+                age: 23
+            }
         }
     }
 </script>

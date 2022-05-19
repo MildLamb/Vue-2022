@@ -3,24 +3,18 @@
     <div class="role">
         <h2>角色名称：{{name}}</h2>
         <h2>角色年龄：{{age}}</h2>
-        <button @click="showInfo">点我提示姓名</button>
     </div>
 </template>
 <script>
-    export default {
-        name: "Role",
-        data(){
-            return {
-                name: "kindred",
-                age: 1500
-            }
-        },
-        methods: {
-            showInfo(){
-                alert(this.name);
-            }
+export default {
+    name: "Role",
+    data(){
+        return {
+            name: "千珏",
+            age: 1500
         }
-    };
+    }
+}
 </script>
 <style>
     /*组件的样式*/
