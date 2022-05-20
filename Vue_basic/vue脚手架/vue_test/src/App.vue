@@ -3,8 +3,8 @@
         <div class="todo-container">
             <div class="todo-wrap">
                 <MyTop :getObj="addToDo"></MyTop>
-                <ToDoList :todos="todos" :changeFinish="changeFinish"></ToDoList>
-                <MyFooter></MyFooter>
+                <ToDoList :todos="todos" :changeFinish="changeFinish" :del="del"></ToDoList>
+                <MyFooter :todos="todos" :allChange="allChange" :allClear="allClear"></MyFooter>
             </div>
         </div>
     </div>
@@ -39,15 +39,31 @@ export default {
         }
     },
     methods: {
+        // 添加
         addToDo(obj){
             this.todos.push(obj);
         },
+        // 修改
         changeFinish(id){
             this.todos.forEach((todo)=>{
                 if (todo.id === id){
                     todo.isFinish = !todo.isFinish;
                 }
             })
+        },
+        // 删除
+        del(id){
+            this.todos = this.todos.filter((todo)=>{
+                return todo.id !== id;
+            })
+        },
+        // 全选，全不选
+        allChange(sign){
+            this.todos.forEach(todo => todo.isFinish = sign);
+        },
+        // 删除所有完成的事情
+        allClear(){
+            this.todos = this.todos.filter(todo => todo.isFinish !== true);
         }
     }
 }

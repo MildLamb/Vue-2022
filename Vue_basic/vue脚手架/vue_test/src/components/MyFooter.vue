@@ -1,18 +1,50 @@
 <template>
-    <div class="todo-footer">
+    <div class="todo-footer" v-show="toDoTotal">
         <label>
-            <input type="checkbox"/>
+<!--            <input type="checkbox" :checked="isAll" @click="changeAll"/>-->
+            <input type="checkbox" v-model="isAll"/>
         </label>
         <span>
-            <span>已完成：0</span> / 全部：2
+            <span>已完成：{{finishTotal}}</span> / 全部：{{toDoTotal}}
         </span>
-        <button class="btn btn-danger">清除已完成的任务</button>
+        <button class="btn btn-danger" @click="allClear">清除已完成的任务</button>
     </div>
 </template>
 
 <script>
 export default {
-    name: "MyFooter"
+    name: "MyFooter",
+    props: ["todos","allChange","allClear"],
+    computed: {
+        isAll: {
+            get() {
+                return this.finishTotal === this.toDoTotal && this.toDoTotal > 0;
+            },
+            set(sign){
+                this.allChange(sign);
+            }
+        },
+        toDoTotal(){
+            return this.todos.length;
+        },
+        finishTotal: {
+            /**
+             * reduce(pre,current)
+             * pre 是上一次的返回值，初始值是第二个参数，这里是0
+             * current 是todos中的每一项
+             */
+            get(){
+                return this.todos.reduce((pre,todo)=>{
+                    return pre + (todo.isFinish === true ? 1 : 0);
+                },0)
+            }
+        }
+    },
+    methods: {
+        changeAll(event){
+            this.allChange(event.target.checked);
+        }
+    }
 }
 </script>
 
@@ -41,6 +73,7 @@ export default {
     float: right;
     margin-top: 5px;
 }
+
 
 .btn:focus {
     outline: none;
