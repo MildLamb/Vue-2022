@@ -3,7 +3,7 @@
     <div class="role">
         <h2>角色名称：{{name}}</h2>
         <h2>角色年龄：{{age}}</h2>
-        <button @click="showInfo">点我提示姓名</button>
+        <button @click="sendRoleName">显式MasterName</button>
     </div>
 </template>
 <script>
@@ -16,8 +16,9 @@
             }
         },
         methods: {
-            showInfo(){
-                alert(this.name);
+            sendRoleName(){
+                // 触发Role组件(组件标签名为MyRole)实例身上的kind事件
+                this.$emit("kind",this.name,this.age,true,127);
             }
         }
     };
