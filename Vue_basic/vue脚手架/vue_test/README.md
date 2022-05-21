@@ -102,9 +102,33 @@ export {min};
 - 功能：用于增强Vue
 - 本质：包含install方法的一个对象，install的第一个参数是Vue，第二个以后的参数是插件使用者传递的数据
 
+# ToDoList案例总结
 ## 组件化编码流程
 1. 实现静态组件： 抽取组件，使用组件实现静态的页面效果
-2. 展示动态数据：
-   1. 数据的类型，名称是什么?
-   2. 数据保存在哪个组件?
+2. 展示动态数据： 考虑号数据的存放位置，数据是一个组件在用，还是一些组件在用
+   1. 一个组件在用：放在组件自身即可
+   2. 一些组件在用：放在它们共同的父组件上
 3. 交互 ---- 从绑定事件监听开始
+
+## props适用于：
+(1). 父组件 ==> 子组件 通信
+(2). 子组件 ==> 父组件 通信(要求父先给子一个函数)
+
+## 使用v-model时要切记
+- v-model绑定的值是不可以是props传过来的值，因为props是不可以修改的
+- props传过来的若是对象类型的值，修改对象中的属性Vue不会报错，但不推荐这样使用
+
+
+# webStorage
+1. 存储内容大小一般 支持5MB左右(不同浏览器可能不一样)
+2. 浏览器通过 window.sessionStorage 和 window.localStorage 属性来实现本地存储机制
+3. 相关API：
+    - xxxStorage.setItem("key","value")
+    - xxxStorage.getItem("key")
+    - xxxStorage.removeItem("key")
+    - xxxStorage.clear()
+4. 备注：
+   1. sessionStorage存储的内容会随着浏览器窗口关闭而消失
+   2. localStorage存储的内容，需要手动清除才会消失
+   3. getItem("key")如果对应的key的值不存在，返回为null
+   4. JSON.parse(null) 返回值任然是null
