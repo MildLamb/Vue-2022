@@ -128,7 +128,53 @@ export {min};
     - xxxStorage.removeItem("key")
     - xxxStorage.clear()
 4. 备注：
-   1. sessionStorage存储的内容会随着浏览器窗口关闭而消失
-   2. localStorage存储的内容，需要手动清除才会消失
-   3. getItem("key")如果对应的key的值不存在，返回为null
-   4. JSON.parse(null) 返回值任然是null
+   - sessionStorage存储的内容会随着浏览器窗口关闭而消失
+   - localStorage存储的内容，需要手动清除才会消失
+   - getItem("key")如果对应的key的值不存在，返回为null
+   - JSON.parse(null) 返回值任然是null
+
+# 组件的自定义事件
+1. 一种组件间通信的方式，适用于：子组件 ===> 父组件
+2. 使用场景：A是父组件，B是子组件，B想给A传数据，那么就要在A中给B绑定自定义事件(事件的回调在A中)
+3. 绑定自定义事件：
+   - 一种方式，在父组件中：```<Demo @xxx="testMethod"/>  或者 <Demo v-on:xxx="testMethod"/>```
+   - 第二种方式，在父组件中
+```html
+<Demo ref="id"/>
+... ...
+mounted(){
+    this.$refs.id.$on("xxx",this.testMethod)  或者  this.$refs.id.$on("xxx",()=>{})
+}
+```
+   - 若想让自定义事件只触发一次，可以使用once修饰符，或$once方法
+4. 触发自定义事件： this.$emit("xxx",args)
+5. 解绑自定义事件： this.$off("xxx")
+6. 组件上也可以绑定原生DOM事件，但需要.native修饰
+7. 注意：通过this.$refs.id.$on("xxx",回调函数)绑定自定义事件时，回调要么配置在methods中，然后通过this去调用；要么写成 箭头函数
+否则this指向的会是，触发该自定义事件的 组件实例对象(vc)
+
+# 全局事件总线
+1. 以种组件间通信的方式：适用于任意组件间的通信
+2. 安装全局事件总线：
+```vue
+new Vue({
+    ... ...
+    beforeCreate(){
+        Vue.prototype.$bus = this;  // 安装全局事件总线，$bus就是当前应用的vm
+    }
+});
+```
+3. 使用事件总线：
+   - 接收数据：A组件想接收数据，则在A组件总给$bus绑定自定义事件，事件的回调留在A组件自身
+```
+methods(){
+   demo(data){.......}
+},
+... ...
+mounted(){
+   this.$bus.$on("xxx",this.demo)
+}
+```
+   - 提供数据```this.$bus.$emit("xxx",数据)```
+
+4. 最好在beforeDestroy钩子中，用$off解绑当前组件所用到的事件

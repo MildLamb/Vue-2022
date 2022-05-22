@@ -2,6 +2,7 @@
     <div class="master">
         <h2>用户名称：{{name}}</h2>
         <h2>用户年龄：{{age}}</h2>
+        <button @click="sendMasterName">显式MasterName</button>
     </div>
 </template>
 
@@ -14,20 +15,11 @@
                 age: 23
             }
         },
+        props: ["getMasterName"],
         methods: {
-            getRoleName(name){
-                console.log("Master组件，收到数据：" + name);
+            sendMasterName(){
+                this.getMasterName(this.name);
             }
-        },
-        mounted() {
-            // console.log("Master",this.x);
-            /*this.$bus.$on("hello",(data)=>{
-                console.log("Master组件，收到数据：" + data);
-            });*/
-            this.$bus.$on("hello",this.getRoleName);
-        },
-        beforeDestroy() {
-            this.$bus.$off("hello");
         }
     }
 </script>

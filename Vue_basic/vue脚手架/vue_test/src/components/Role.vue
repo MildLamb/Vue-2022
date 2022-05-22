@@ -3,7 +3,7 @@
     <div class="role">
         <h2>角色名称：{{name}}</h2>
         <h2>角色年龄：{{age}}</h2>
-        <button @click="sendRoleName">显式MasterName</button>
+        <button @click="sendRoleName">把角色名给Master组件</button>
     </div>
 </template>
 <script>
@@ -16,9 +16,8 @@
             }
         },
         methods: {
-            sendRoleName(){
-                // 触发Role组件(组件标签名为MyRole)实例身上的kind事件
-                this.$emit("kind",this.name,this.age,true,127);
+            sendRoleName() {
+                this.$bus.$emit("hello",this.name);
             }
         }
     };
