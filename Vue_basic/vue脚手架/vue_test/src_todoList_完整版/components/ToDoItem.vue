@@ -32,6 +32,7 @@ export default {
             if (todo.hasOwnProperty("isEdit")){
                 todo.isEdit = true;
                 // 切换为可编辑模式时自动获取焦点
+                // nextTick 所指定的回调会在 DOM 更新完毕后执行
                 this.$nextTick(() => {
                     this.$refs.input.focus()
                 });
