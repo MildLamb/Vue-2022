@@ -1,18 +1,16 @@
-// 引入Vue
-import Vue from 'vue'
-// 引入App组件
-import MyApp from './App.vue'
+//引入Vue
+import Vue from "vue";
+//引入App
+import App from './App';
 
+//关闭Vue的生产提示
 Vue.config.productionTip = false;
 
 
-// 创建Vue实例
 new Vue({
-    components: {
-      MyApp
-    },
-    render: h => h(MyApp),
+    el: '#container',
+    render: h => h(App),
     beforeCreate() {
         Vue.prototype.$bus = this;
     }
-}).$mount("#container");
+});

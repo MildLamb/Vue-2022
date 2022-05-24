@@ -197,3 +197,36 @@ mounted(){
 1. 语法: this.$nextTick(回调函数)
 2. 作用：在下一次 DOM 更新结束后执行其指定的回调
 3. 什么时候用：当改变数据后，要基于更新后的新DOM进行某些操作时，要在nextTick所指定的回调函数中执行
+
+
+# vue脚手架配置代理
+## 方法一
+- 在vue.config.js中添加如下配置：
+```text
+devServer: {
+ proxy: "http://localhost:4567"
+}
+```
+- 说明：
+  - 优点：配置简单，请求资源时直接发给前端(8080)即可
+  - 缺点：不能配置多个代理，不能灵活的控制请求是否走代理
+  - 工作方式：若按照上述配置代理，当请求了前端不存在的资源时，那么该请求会转发给服务器(优先匹配前端已有资源)
+
+## 方法二
+- 在vue.config.js中添加如下配置：
+```text
+devServer: {
+    proxy: {
+      "/info": {   // 匹配所有以  /info 开头的请求路径
+        target: "http://localhost:4567",    // 代理目标的基础路径
+        pathRewrite: {"^/info":""},     // 代理服务器给真正的资源服务器请求的时候不需要前缀了
+        ws: true,   // websocket支持
+        changeOrigin: true   // 用于控制请求头中host值是 源(8080)还是目标服务器(4567)
+      },
+      "/m_info": {
+        target: "http://localhost:8081",
+        pathRewrite: {"^/m_info":""}
+      }
+    }
+  }
+```
