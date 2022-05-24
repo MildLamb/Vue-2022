@@ -1,4 +1,5 @@
 <template>
+    <transition name="todo_li" appear>
     <li>
         <label>
             <input type="checkbox" :checked="(todo.isFinish === true ? true : false)" @click="handleCheck(todo.id)"/>
@@ -10,6 +11,7 @@
         <button class="btn btn-danger" @click="delWant(todo.id)">删除</button>
         <button v-show="!todo.isEdit" class="btn btn-edit" @click="handleEdit(todo,$event)">编辑</button>
     </li>
+    </transition>
 </template>
 
 <script>
@@ -100,6 +102,25 @@ li:hover {
 
 li:hover button {
     display: block;
+}
+
+/**
+    进入的起点,离开的终点
+ */
+.todo_li-enter,.todo_li-leave-to {
+    transform: translateX(100%);
+}
+/**
+    进入的终点,离开的起点
+ */
+.todo_li-enter-to,.todo_li-leave {
+    transform: translateX(0);
+}
+/**
+    整个进入过程中
+ */
+.todo_li-enter-active,.todo_li-leave-active {
+    transition: 0.5s linear;
 }
 
 

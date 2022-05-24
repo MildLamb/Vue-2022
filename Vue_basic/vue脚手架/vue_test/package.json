@@ -11,6 +11,7 @@
     "crypto": false
   },
   "dependencies": {
+    "animate.css": "^4.1.1",
     "core-js": "^3.8.3",
     "crypto-browserify": "^3.12.0",
     "nanoid": "^3.3.4",
