@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <!--展示用户列表-->
-        <div class="card" v-for="user in userInfo.users" :key="user.id" v-show="users.length">
+        <div class="card" v-for="user in userInfo.users" :key="user.id" v-show="userInfo.users.length">
             <a target="_blank" :href="user.html_url">
                 <img :src="user.avatar_url" style='width: 100px'/>
             </a>

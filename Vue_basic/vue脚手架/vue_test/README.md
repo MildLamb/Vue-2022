@@ -230,3 +230,72 @@ devServer: {
     }
   }
 ```
+
+# 插槽
+1. 作用：让父组件可以向子组件指定位置插入html结构，也是一种组件间通信方式，适用于父组件 ===> 子组件
+2. 分类：默认插槽，具名插槽，作用域插槽
+3. 使用方式：
+    
+- 默认插槽
+```text
+父组件中：
+    <Category>
+        <div>html结构</div>
+    </Category>
+子组件中：
+    <template>
+        <div>
+            <!-- 定义插槽 -->
+            <slot>插槽默认内容</slot>
+        </div>
+    </template>
+```
+- 具名插槽
+```text
+父组件中：
+    <Category>
+        <template v-slot:name1>
+            <div>html结构</div>
+        </template>
+        
+        <template v-slot:name2>
+            <div>html结构</div>
+        </template>
+    </Category>
+子组件中：
+    <template>
+        <div>
+            <!-- 定义插槽 -->
+            <slot name="name1">插槽默认内容</slot>
+            <slot name="name2">插槽默认内容</slot>
+        </div>
+    </template>
+```
+- 作用域插槽：数据在组件的自身，但根据数据生成的结构需要组件的使用者来决定.(weapons数据在Category组件中，但结构由App组件控制)
+```text
+父组件中：
+    <Category>
+        <template v-slot="aname">
+            <ul>
+                <li v-for="(item,index) in aname.prop" :key="index">{{item}}</li>
+            </ul>
+        </template>
+    </Category>
+    
+子组件中：
+    <template>
+        <div>
+            <slot :aname="my_data"></slot>
+        </div>
+    </template>
+    
+    <script>
+        export default {
+            ... ...
+            data() {
+                return {
+                    my_data: xxx
+                }
+            }
+        }
+```

@@ -10,5 +10,7 @@ Vue.config.productionTip = false;
 new Vue({
     el: '#container',
     render: h => h(App),
-
+    beforeCreate() {
+        Vue.prototype.$bus = this;
+    }
 });
