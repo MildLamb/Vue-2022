@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>当前求和为：{{sum}}</h1>
+        <h1>当前求和为：{{$store.state.sum}}</h1>
         <select v-model.number="num">
             <option value="1">1</option>
             <option value="2">2</option>
@@ -18,26 +18,22 @@ export default {
     name: "Count",
     data(){
         return {
-            sum: 0,
             num: 1
         }
     },
     methods: {
+        // 本身没有什么业务逻辑，直接就掉方法；store直接去commit调用mutations
         increment(){
-            this.sum += this.num;
+            this.$store.commit("ADD",this.num);
         },
         decrement(){
-            this.sum -= this.num;
+            this.$store.commit("DESC",this.num);
         },
         incrementOdd(){
-            if (this.sum % 2){
-                this.sum += this.num;
-            }
+            this.$store.dispatch("addOdd",this.num);
         },
         time_incr(){
-            setTimeout(()=>{
-                this.sum += this.num;
-            },1000);
+            this.$store.dispatch("timeAdd",this.num);
         }
     }
 }

@@ -308,3 +308,46 @@ devServer: {
 ## 什么时候使用Vuex?
 1. 多个组件依赖于同一状态
 2. 来自不同组件的行为需要变更同一状态
+
+# Vuex基本使用
+1. 初始化数据，配置actions，配置mutations，配置state，操作文件store.js 或 store/index.js
+```text
+// 该文件用于创建Vuex中最为核心的store
+
+// 引入Vuex
+import Vuex from "vuex";
+// 引入Vue
+import Vue from "vue";
+
+// [vuex] must call Vue.use(Vuex) before creating a store instance.
+Vue.use(Vuex);
+
+// 准备 actions --- 用于响应组件中的动作
+const actions = {
+        add: function (context,data){
+        console.log("actions中的add被调用了",context,data);
+        context.commit("ADD",data);
+    }
+}
+// 准备 mutations --- 用于执行操作
+const mutations = {
+    ADD: function (state,data){
+        state.sum += data;
+    }
+}
+// 准备 state --- 用于存储数据
+const state = {
+    sum: 0
+}
+
+
+// 创建Store并暴露
+export default new Vuex.Store({
+    actions:actions,
+    mutations:mutations,
+    state:state
+});
+```
+2. 组件中读取vuex中的数据：$store.state.xxx
+3. 组件中修改vuex中的数据：$store.dispatch("actions中的方法名",数据) 或 $store.commit("mutations中的方法名",数据)
+4. 备注：若没有网络请求或其他业务逻辑，组件中也可以越过actions，即可以不写dispatch，直接commit执行mutations中的方法
