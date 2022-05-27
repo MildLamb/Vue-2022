@@ -102,6 +102,8 @@ export {min};
 - 功能：用于增强Vue
 - 本质：包含install方法的一个对象，install的第一个参数是Vue，第二个以后的参数是插件使用者传递的数据
 
+<hr>
+
 # ToDoList案例总结
 ## 组件化编码流程
 1. 实现静态组件： 抽取组件，使用组件实现静态的页面效果
@@ -132,6 +134,10 @@ export {min};
    - localStorage存储的内容，需要手动清除才会消失
    - getItem("key")如果对应的key的值不存在，返回为null
    - JSON.parse(null) 返回值任然是null
+
+<hr>
+
+# 组件间通信
 
 # 组件的自定义事件
 1. 一种组件间通信的方式，适用于：子组件 ===> 父组件
@@ -199,6 +205,9 @@ mounted(){
 3. 什么时候用：当改变数据后，要基于更新后的新DOM进行某些操作时，要在nextTick所指定的回调函数中执行
 
 
+<hr>
+
+
 # vue脚手架配置代理
 ## 方法一
 - 在vue.config.js中添加如下配置：
@@ -230,6 +239,8 @@ devServer: {
     }
   }
 ```
+
+<hr>
 
 # 插槽
 1. 作用：让父组件可以向子组件指定位置插入html结构，也是一种组件间通信方式，适用于父组件 ===> 子组件
@@ -299,6 +310,8 @@ devServer: {
             }
         }
 ```
+
+<hr>
 
 # 理解vuex
 ## vuex是什么
@@ -395,3 +408,176 @@ methods: {
     // ...mapMutations(["incrementOdd","time_incr"]),
 }
 ```
+
+<hr>
+
+
+# 模块化 + 命名空间
+1. 目的： 让代码更好维护，让多种数据分类更加明确
+2. 修改 store.js
+```javascript
+// 该文件用于创建Vuex中最为核心的store
+
+// 引入Vuex
+import Vuex from "vuex";
+// 引入Vue
+import Vue from "vue";
+
+import axios from "axios";
+
+// [vuex] must call Vue.use(Vuex) before creating a store instance.
+Vue.use(Vuex);
+
+
+// 求和功能相关的配置
+const countOptions = {
+    // 开启命名空间
+    namespaced: true,
+    actions: {
+
+    },
+    mutations: {
+
+    },
+    state: {
+
+    },
+    getters: {
+
+    }
+}
+
+// 角色管理相关的配置
+const roleOptions = {
+    // 开启命名空间
+    namespaced: true,
+    actions: {
+
+    },
+    mutations: {
+
+    },
+    state: {
+
+    },
+    getters: {
+
+    }
+}
+
+
+// 创建Store并暴露
+export default new Vuex.Store({
+    modules: {
+        countAbout:countOptions,
+        roleAbout:roleOptions
+    }
+});
+```
+3. 开启命名空间后，组件中读取state数据
+```text
+// 方式一：自己直接读取
+this.$store.state.namespacedName.props;
+// 方式二：借助了mapState读取
+...mapState("namespacedName",["props"]);
+```
+4. 开启命名空间后，组件中读取getters数据
+```text
+// 方式一：自己直接读取
+this.$store.getters["namespacedName/gettersName"];
+// 方式二：借助了mapGetters读取
+...mapGetters("namespacedName",["gettersName"]);
+```
+5. 开启命名空间后，组件调用dispatch
+```text
+// 方式一：自己直接dispatch
+yourMethod(){
+    this.$store.dispatch("namespacedName/ActionName",data);
+}
+// 方式二：借助mapActions
+...mapActions("namespacedName",{yourMethod: "ActionName",yourMethod2: "ActionName2"});
+```
+6. 开启命名空间后，组件中调用commit
+```text
+// 方式一：自己直接commit
+yourMethod(){
+    this.$store.commit("namespacedName/MutationName",data);
+}
+// 方式二：借助mapActions
+...mapMutations("namespacedName",{yourMethod: "MutationName",yourMethod2: "MutationName2"})
+```
+
+<hr>
+
+# vue-router
+## vue-router的理解
+vue的一个插件库，专门用来实现SPA应用
+
+## SPA的理解
+1. 单页面web应用(single page web application,SPA)
+2. 整个应用只有一个完整的页面
+3. 点击页面中的导航链接不会刷新页面，只会做页面的局部更新
+4. 数据需要通过ajax请求获取
+
+## vue-router基本使用
+1. 安装vue-router插件, npm i vue-router@3   , 注意vue2只能用router3
+2. 使用插件 Vue.use(VueRouter)
+3. 编写router实例对象，管理路由规则
+```text
+// 该文件专门用于创建整个应用的路由器
+import VueRouter from "vue-router";
+import About from "@/components/About";
+import Home from "@/components/Home";
+
+
+// 创建并暴露一个路由器
+export default new VueRouter({
+    routes: [
+        {
+            path: "/about",
+            component: About
+        },
+        {
+            path: "/home",
+            component: Home
+        }
+    ]
+})
+```
+4. main.js使用自己的路由规则
+```text
+import Vue from "vue";
+import App from "./App";
+// 引入vue-router插件
+import VueRouter from "vue-router";
+// 引入路由器
+import MyRouter from "./router/index";
+
+Vue.config.productionTip = false;
+// 使用 vue-router 插件
+Vue.use(VueRouter);
+
+new Vue({
+    el: "#container",
+    components: {
+        App
+    },
+    render: h => h(App),
+    // 把我的路由器交给路由配置项
+    router: MyRouter
+});
+```
+5. 实现样式切换
+```text
+<router-link active-class="active" to="/about">About</router-link>
+```
+6. 指定组件展示位置
+```text
+<router-view></router-view>
+```
+
+## 几个注意点
+1. 路由组件通常存放在 pages 文件夹，一般组件通常存放在 components 文件夹
+2. 通过切换，"隐藏"了的路由组件，默认是被销毁掉的，需要的时候再去挂载
+3. 每个组件都有自己的 $route 属性，里面存储着自己的路由信息
+4. 整个应用只有一个router，可以通过组件的$router属性获取到

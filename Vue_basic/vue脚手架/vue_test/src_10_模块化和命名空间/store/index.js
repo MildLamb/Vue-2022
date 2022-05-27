@@ -5,6 +5,8 @@ import Vuex from "vuex";
 // 引入Vue
 import Vue from "vue";
 
+import axios from "axios";
+
 // [vuex] must call Vue.use(Vuex) before creating a store instance.
 Vue.use(Vuex);
 
@@ -49,16 +51,43 @@ const countOptions = {
 const roleOptions = {
     // 开启命名空间
     namespaced: true,
-    actions: {},
+    actions: {
+        addRoleJue(context,roleObj){
+            if (!roleObj.name.indexOf("珏")){
+                context.commit("ADD_ROLE",roleObj);
+            } else {
+                alert("角色名加珏");
+            }
+        },
+        getServeResponse(context){
+            axios.get("https://api.uixsj.cn/hitokoto/get?type=social").then(
+                response => {
+                    context.commit("GET_RESPONSE",response.data);
+                },
+                error => {
+                    context.commit("GET_RESPONSE",error.message);
+                }
+            )
+        }
+    },
     mutations: {
         ADD_ROLE(state,roleObj){
             state.roleList.push(roleObj);
+        },
+        GET_RESPONSE(state,resp){
+            console.log("请求服务器响应");
+                state.response = resp;
         }
     },
     state: {
-        roleList: [{id: "001",name: "千珏"},{id: "002",name: "纳尔"},{id: "003",name: "妮蔻"}]
+        roleList: [{id: "001",name: "千珏"},{id: "002",name: "纳尔"},{id: "003",name: "妮蔻"}],
+        response: ""
     },
-    getters: {}
+    getters: {
+        firstRoleName(state){
+            return state.roleList[0].name;
+        }
+    }
 }
 
 
