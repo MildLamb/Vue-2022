@@ -351,3 +351,47 @@ export default new Vuex.Store({
 2. 组件中读取vuex中的数据：$store.state.xxx
 3. 组件中修改vuex中的数据：$store.dispatch("actions中的方法名",数据) 或 $store.commit("mutations中的方法名",数据)
 4. 备注：若没有网络请求或其他业务逻辑，组件中也可以越过actions，即可以不写dispatch，直接commit执行mutations中的方法
+
+
+## Vuex中四个map方法使用
+1. mapState方法：用于帮助我们映射state中的数据为计算属性
+```text
+computed: {
+    // 借助mapState生成计算属性，从state中读取数据。(对象写法)
+    // ...mapState({"addSum":"sum",local:"local",champion:"role"})
+
+    // // 借助mapState生成计算属性，从state中读取数据。(数组写法)
+    // 如果你的mapState的键名和state中属性的键名字相同
+    ...mapState(["sum","local","role"]),
+}
+```
+
+2. mapGetters方法：用于帮助我们映射getters中的数据为计算属性
+```text
+computed: {
+    // 借助mapGetters生成计算属性，从getters中读取数据。(对象写法)
+    // ...mapGetters({"addSum":"sum",local:"local",champion:"role"})
+
+    // // 借助mapGetters生成计算属性，从getters中读取数据。(数组写法)
+    // 如果你的mapGetters的键名和getters中属性的键名字相同
+    ...mapGetters(["sum","local","role"]),
+}
+```
+3. mapActions方法：用于帮助我们生成与actions对话的方法，即：包含$store.dispatch(xxx,data)的函数
+```text
+methods: {
+    // 借助mapMutations生成对应的方法，方法中会调用commit去联系mutations,(对象写法)
+    ...mapMutations({"increment":"ADD",decrement:"DESC"}),
+    // 如果你的mapMutations的方法名和Mutations中的方法名相同，则可以使用数组写法
+    // ...mapMutations(["ADD","DESC"]),
+}
+```
+4. mapMutations方法：用于帮助我们生成与mutations对话的方法：即：包含$store.commit(xxx,data)的函数
+```text
+methods: {
+    // 借助mapActions生成对应的方法，方法中会调用dispatch去联系Actions中的方法 (对象写法)
+    ...mapActions({"incrementOdd":"addOdd",time_incr: "timeAdd"})
+    // 如果你的mapActions的方法名和Actions中的方法名相同，则可以使用 数组写法
+    // ...mapMutations(["incrementOdd","time_incr"]),
+}
+```

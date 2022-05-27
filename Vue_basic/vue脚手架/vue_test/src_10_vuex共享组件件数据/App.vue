@@ -2,20 +2,20 @@
     <div class="container">
         <Count></Count>
         <hr>
-<!--        <Role></Role>-->
+        <Role></Role>
     </div>
 </template>
 
 <script>
 
 import Count from "@/components/Count";
-// import Role from "@/components/Role";
+import Role from "@/components/Role";
 
 export default {
     name: "App",
     components: {
         Count,
-        // Role
+        Role
     }
 }
 </script>
