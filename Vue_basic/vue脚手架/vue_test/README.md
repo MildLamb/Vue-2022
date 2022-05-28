@@ -581,3 +581,174 @@ new Vue({
 2. 通过切换，"隐藏"了的路由组件，默认是被销毁掉的，需要的时候再去挂载
 3. 每个组件都有自己的 $route 属性，里面存储着自己的路由信息
 4. 整个应用只有一个router，可以通过组件的$router属性获取到
+
+## 多级路由(嵌套路由)
+1. 配置路由规则，使用children配置项
+```text
+export default new VueRouter({
+    routes: [
+        {
+            path: "/home",
+            component: Home,
+            children: [
+                {
+                    path: "news",
+                    component: News
+                }
+            ]
+        }
+    ]
+})
+```
+2. 跳转(写完整的后缀)
+```text
+<router-link to="/home/news">News</router-link>
+```
+
+## 命名路由
+1. 作用：一些时候可以简化路由的跳转
+2. 如何使用：
+- 给路由命名
+```text
+routes: [
+        {
+            name: "guanyu",
+            path: "/about",
+            component: About
+        },
+        {
+            path: "/home",
+            component: Home,
+            children: [
+                {
+                    path: "news",
+                    component: News
+                },
+                {
+                    path: "message",
+                    component: Message,
+                    children: [
+                        {
+                            name: "xiangqing",
+                            path: "detail",
+                            component: Detail
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+```
+- 简化跳转：
+```text
+<!-- 简化前 -->
+<router-link class="list-group-item" active-class="active" to="/about">About</router-link>
+<!-------------------------------------->
+<router-link :to="{path:'/home/message/detail',query:{id:msg.id,title:msg.title}}">{{msg.title}}</router-link>
+
+<!-- 简化后，通过name指定名字直接跳转 -->
+<router-link class="list-group-item" active-class="active" :to="{name: 'guanyu'}">About</router-link>
+<!-------------------------------------->
+<router-link :to="{name:'xiangqing',query:{id:msg.id,title:msg.title}}">{{msg.title}}</router-link>
+```
+
+# 路由传参
+## query传参
+
+- 路由接收
+```text
+// 三级路由 detail 的配置
+children: [
+    {
+        name: "xiangqing",
+        path: "detail",
+        component: Detail
+    }
+]
+```
+
+- 跳转
+```text
+// query 参数写法
+
+// 路由跳转并携带query参数，to字符串写法
+<router-link :to="`/home/message/detail?id=${msg.id}&title=${msg.title}`">{{msg.title}}</router-link>
+// 跳转路由并携带query参数，to对象写法
+<router-link :to="{name:'xiangqing',query:{id: msg.id,title: msg.title}}">{{msg.title}}</router-link>
+<router-link :to="{path:'/home/message/detail',query:{id: msg.id,title: msg.title}}">{{msg.title}}</router-link>
+```
+
+- 使用
+```text
+// Detail组件中 使用$route.query.xxx 获取参数值
+<ul>
+    <li>消息编号：{{$route.query.id}}</li>
+    <li>消息内容：{{$route.query.title}}</li>
+</ul>
+```
+
+## params 传参，params只能用命名路由传递
+- 路由接收 
+```text
+... ...
+children: [
+    {
+        name: "xiangqing",
+        path: "detail/:rid/:title",
+        component: Detail
+    }
+]
+```
+- 跳转
+```text
+<!--  跳转路由并携带params参数，to字符串写法-->
+<router-link :to="`/home/message/detail/${msg.id}/${msg.title}`">{{msg.title}}</router-link> &nbsp;&nbsp;
+<!--  跳转路由并携带params参数，to对象写法,只能使用name，不能使用path-->
+<router-link :to="{name:'xiangqing',params: {rid: msg.id,title: msg.title}}">{{msg.title}}</router-link>
+```
+- 使用
+```text
+// Detail组件中使用 params 传递过来的参数
+<ul>
+    <li>消息编号：{{$route.params.rid}}</li>
+    <li>消息内容：{{$route.params.title}}</li>
+</ul>
+```
+
+## 路由的props属性
+```text
+children: [
+    {
+        name: "xiangqing",
+        path: "detail/:rid/:title",
+        component: Detail,
+        // props的第一种写法，值为对象，该对象中的所有key-value都会以props的形式传递给当前配置props配置项所在的组件,传递的是死数据，用的少
+        /*props: {
+            name: "kindred",
+            age: 1500
+        }*/
+
+        // props第二种写法, 值为布尔值，若布尔值为真，就会把该路由组件收到的所有params参数，以props的形式传递给当前配置props配置项所在的组件
+        // props: true
+
+        /* props第三种写法，值为函数，函数的返回值配置为对象，对象中匹配属性的值
+            这种方式就可以匹配 query 属性
+         */
+
+        /*props($route){
+            return {
+                rid: $route.params.rid,
+                title: $route.params.title
+            }
+        }*/
+
+        // 使用解构赋值简化第三种写法 ,假如想要query中的参数  {query},  意思是从 $route 中提取 query属性作为参数
+        props({params}){
+            return {
+                rid: params.rid,
+                title: params.title
+            }
+        }
+    }
+]
+```
