@@ -752,3 +752,45 @@ children: [
     }
 ]
 ```
+
+### router-link 的 replace 属性
+1. 作用：控制路由跳转时操作浏览器历史记录的模式
+2. 浏览器的历史记录有两种写入模式：分别为push和replace，push是追加历史记录，replace是替换当前(栈顶)记录，路由跳转时候
+默认为push
+3. 如何开启replace模式，<router-link :replace="true">News</router-link>
+
+## 编程式路由导航
+1. 作用：不借助<router-link> 实现路由跳转，让路由跳转更加灵活
+2. 具体编码：
+```text
+// push 模式
+this.$router.push({
+    name: "xiangqing",
+    params: {
+        rid: msg.id,
+        title: msg.title
+    }
+})
+
+
+// replace 模式
+this.$router.replace({
+    name: "xiangqing",
+    params: {
+        rid: msg.id,
+        title: msg.title
+    }
+})
+
+
+// 历史记录后退
+this.$router.back();
+
+// 历史记录前进
+this.$router.forward();
+
+// 自己控制前进还是后退，以及多少步
+// 正数表示前进几次
+// 负数表示后退几步
+this.$router.go(-2);
+```
