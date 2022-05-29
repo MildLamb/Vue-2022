@@ -794,3 +794,18 @@ this.$router.forward();
 // 负数表示后退几步
 this.$router.go(-2);
 ```
+
+## 缓存路由组件
+1. 作用：让不展示的路由组件保持挂载，不被销毁
+2. 具体编码
+```text
+<keep-alive include="['News','Message']">
+    <router-view></router-view>
+</keep-alive>
+```
+
+## 两个新的生命周期钩子
+1. 作用：路由组件所独有的两个钩子，用于捕获路由组件的激活状态
+2. 具体名字：
+   1. activated 路由组件被激活时触发
+   2. deactivated 路由组件失活时触发

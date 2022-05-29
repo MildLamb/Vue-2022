@@ -10,7 +10,10 @@
                     <router-link class="list-group-item" active-class="active" to="/home/message">Message</router-link>
                 </li>
             </ul>
-            <router-view></router-view>
+            <!-- include保存的是组件的名字，也就是组件中name配置项指定的名字 -->
+            <keep-alive>
+                <router-view></router-view>
+            </keep-alive>
         </div>
     </div>
 </template>

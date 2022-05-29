@@ -47,7 +47,10 @@ export default {
                 }
             })
         }
-    }
+    },
+/*    destroyed() {
+        console.log("Message被销毁了");
+    }*/
 }
 </script>
 
