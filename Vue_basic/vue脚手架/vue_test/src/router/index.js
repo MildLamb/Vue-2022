@@ -8,49 +8,66 @@ import Detail from "@/pages/Detail";
 
 
 // 创建并暴露一个路由器
-export default new VueRouter({
+const router = new VueRouter({
     routes: [
         {
             name: "guanyu",
             path: "/about",
-            component: About
+            component: About,
+            meta: {
+                isAuth: false,
+                title: "关于"
+            }
         },
         {
+            name: "zhuye",
             path: "/home",
             component: Home,
+            meta: {
+                title: "主页"
+            },
             children: [
                 {
+                    name: "xinwen",
                     path: "news",
-                    component: News
+                    component: News,
+                    meta: {
+                        isAuth: true,
+                        title: "新闻介绍"
+                    },
+/*                    /!**
+                     * 独享路由守卫
+                     *!/
+                    beforeEnter: (to, from, next) => {
+                        console.log("独享路由守卫",to,from,next);
+                        if(to.meta.isAuth){
+                            if (localStorage.getItem("master") === "qsj"){
+                                next();
+                            } else {
+                                alert("权限名不对");
+                            }
+                        } else {
+                            next();
+                        }
+                    }*/
                 },
                 {
+                    name: "xiaoxi",
                     path: "message",
                     component: Message,
+                    meta: {
+                        isAuth: true,
+                        title: "消息"
+                    },
                     children: [
                         {
                             name: "xiangqing",
                             path: "detail/:rid/:title",
                             component: Detail,
-                            // props的第一种写法，值为对象，该对象中的所有key-value都会以props的形式传递给当前配置props配置项所在的组件,传递的是死数据，用的少
-                            /*props: {
-                                name: "kindred",
-                                age: 1500
-                            }*/
-
-                            // props第二种写法, 值为布尔值，若布尔值为真，就会把该路由组件收到的所有params参数，以props的形式传递给当前配置props配置项所在的组件
-                            // props: true
-
-                            /* props第三种写法，值为函数，函数的返回值配置为对象，对象中匹配属性的值
-                                这种方式就可以匹配 query 属性
-                             */
-
-                            /*props($route){
-                                return {
-                                    rid: $route.params.rid,
-                                    title: $route.params.title
-                                }
-                            }*/
-
+                            meta: {
+                                title: "详情",
+                                isAuth: true
+                            },
                             // 使用解构赋值简化第三种写法 ,假如想要query中的参数  {query},  意思是从 $route 中提取 query属性作为参数
                             props({params}){
                                 return {
@@ -60,17 +77,40 @@ export default new VueRouter({
                             }
                         }
                     ]
-                    /*
-                    query传递参数
-                    children: [
-                        {
-                            name: "xiangqing",
-                            path: "detail",
-                            component: Detail
-                        }
-                    ]*/
                 }
             ]
         }
     ]
+});
+
+
+
+
+
+/**
+ * 添加路由守卫
+ * - 全局前置路由守卫
+ */
+router.beforeEach((to,from,next)=>{
+    console.log("前置路由守卫",to,from,next);
+    if(to.meta.isAuth){
+        if (localStorage.getItem("master") === "qsj"){
+            next();
+        } else {
+            alert("权限名不对");
+        }
+    } else {
+        next();
+    }
+
 })
+
+/**
+ * 后置路由守卫：初始化的时候被调用，每次路由切换之后被调用
+ */
+router.afterEach((to,from,next)=>{
+    document.title = to.meta.title || "Vue学习首页";
+    console.log("后置路由守卫",to,from,next);
+})
+
+export default router;

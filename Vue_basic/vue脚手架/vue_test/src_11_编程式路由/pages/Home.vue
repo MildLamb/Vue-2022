@@ -21,32 +21,6 @@
 <script>
 export default {
     name: "Home",
-    /**
-     * 通过路由规则，进入该组件时被调用
-     */
-    beforeRouteEnter(to,from,next){
-        console.log("组件路由守卫",to,from,next);
-        if(to.meta.isAuth){
-            if (localStorage.getItem("master") === "qsj"){
-                next();
-            } else {
-                alert("权限名不对");
-            }
-        } else {
-            next();
-        }
-    },
-    /**
-     * 通过路由规则，离开该组件时被调用
-     */
-    beforeRouteLeave(to,from,next){
-        console.log("App---beforeRouteLeave");
-        next();
-    },
-    beforeRouteUpdate(to,from,next){
-        next();
-        console.log("组件被更新了，'\"App---beforeRouteUpdate\"'");
-    }
 }
 </script>
 

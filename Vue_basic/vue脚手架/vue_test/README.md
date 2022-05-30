@@ -809,3 +809,85 @@ this.$router.go(-2);
 2. 具体名字：
    1. activated 路由组件被激活时触发
    2. deactivated 路由组件失活时触发
+
+
+# 路由守卫
+1. 作用：对路由进行权限控制
+2. 分类：全局路由守卫，独享守卫，组件内守卫
+- 全局守卫：
+在路由中配置,对router实例对象配置
+```text
+/**
+ * 添加路由守卫
+ * - 全局前置路由守卫
+ */
+router.beforeEach((to,from,next)=>{
+    console.log("前置路由守卫",to,from,next);
+    if(to.meta.isAuth){
+        if (localStorage.getItem("master") === "qsj"){
+            next();
+        } else {
+            alert("权限名不对");
+        }
+    } else {
+        next();
+    }
+
+})
+
+/**
+ * 后置路由守卫：初始化的时候被调用，每次路由切换之后被调用
+ */
+router.afterEach((to,from,next)=>{
+    document.title = to.meta.title || "Vue学习首页";
+    console.log("后置路由守卫",to,from,next);
+})
+```
+- 独享路由守卫(只有前置守卫)
+单独作为某个路由的一个配置项
+```text
+beforeEnter: (to, from, next) => {
+    console.log("前置路由守卫",to,from,next);
+    if(to.meta.isAuth){
+        if (localStorage.getItem("master") === "qsj"){
+            next();
+        } else {
+            alert("权限名不对");
+        }
+    } else {
+        next();
+    }
+}
+```
+- 组件路由守卫
+写在组件中，类似于生命周期钩子
+```text
+/**
+     * 通过路由规则，进入该组件时被调用
+     */
+    beforeRouteEnter(to,from,next){
+        console.log("组件路由守卫",to,from,next);
+        if(to.meta.isAuth){
+            if (localStorage.getItem("master") === "qsj"){
+                next();
+            } else {
+                alert("权限名不对");
+            }
+        } else {
+            next();
+        }
+    },
+    /**
+     * 通过路由规则，离开该组件时被调用
+     */
+    beforeRouteLeave(to,from,next){
+        console.log("App---beforeRouteLeave");
+        next();
+    },
+    
+    
+    beforeRouteUpdate(to,from,next){
+        next();
+        console.log("组件被更新了，'\"App---beforeRouteUpdate\"'");
+    }
+```
