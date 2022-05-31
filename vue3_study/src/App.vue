@@ -1,57 +1,47 @@
 <template>
     <h1>角色信息</h1>
     <h2>姓名:{{name}}</h2>
-    <h2>外号:{{title}}</h2>
-    <h2>熟练等级:{{level}}</h2>
-    <h2>召唤师是:{{master}}</h2>
-    <button @click="sayHello">简单介绍</button>
-    <button @click="showInfo">熟练度信息</button>
+    <h2>等级:{{level}}</h2>
+    <h2>位置:{{role_info.job}}</h2>
+    <h2>是一只{{role_info.age}}岁的{{role_info.type.name}}</h2>
+    <button @click="changeInfo">修改珏色信息</button>
 </template>
 
 <script>
-// import {h} from 'vue'
+import {ref} from 'vue';
 export default {
     name: 'App',
-    // 此处只是测试一下setup，暂时不考虑响应式的问题
     setup(){
         // 数据
-        let name = "千珏"
-        let otherN = "死亡之灵"
-        let age = 1500
-        let master = "QSJ"
+        let name = ref("千珏")
+        let level = ref(5)
+        let role_info = ref({
+            job: "打野",
+            age: 1500,
+            type: {
+                name: "射手",
+                ename: "ADC"
+            }
+        })
 
-        // 方法
-        /**
-         * Vue3 setup中无法访问 Vue2 形式写的数据和方法
-         */
         function sayHello(){
-            alert(`我叫${name},你也可以叫我${otherN},我已经${age}岁了哦,我们的熟练等级是：${this.level}`);
+            alert(`我叫${name},你也可以叫我${level},我已经${age}岁了哦,我们的熟练等级是：${this.level}`);
             console.log(this.showInfo());
+        }
+
+        function changeInfo(){
+            name.value = "永猎双子";
+            level.value = 7;
+            role_info.value.job = "大乱斗";
+            role_info.value.type.name = "猎人";
         }
 
         return {
             name,
-            title: otherN,
+            level,
             sayHello,
-            master
-        }
-
-        // 渲染函数写法，了解
-        // return () => h("h1","欢迎光临");
-    },
-    data(){
-        return {
-            level: 7,
-            master: "qsj"
-        }
-    },
-    methods: {
-        /**
-         * Vue2可以访问Vue3中setup中的数据
-         */
-        showInfo(){
-            alert(`${this.name}的熟练等级为：${this.level}`);
-            console.log(this.sayHello);
+            changeInfo,
+            role_info
         }
     }
 }

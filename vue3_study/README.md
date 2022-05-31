@@ -12,3 +12,14 @@
       2. 但在setup中不能访问到Vue2配置(data,methods,computed)
       3. 如果有重名，存在覆盖
    2. setup不能是一个async函数，因为返回值不再是return的对象，而是promise，模板看不到return对象中的属性
+
+## ref函数
+1. 作用：定义一个响应式的数据
+2. 语法：const xxx = ref(initValue);
+   - 创建一个包含响应式数据的引用对象(reference对象)
+   - JS 中操作数据：xxx.value
+   - 模板中读取数据：不需要.value,直接通过xxx读取 , <div>{{xxx}}</div>
+3. 备注：
+   - 接收的数据可以是：基本类型，也可以是对象类型
+   - 基本数据类型的数据：响应式依然是靠 Object.defineProperty() 的 get 与 set 完成
+   - 对象类型的数据：内部借助了 Vue3 中的一个新函数 ------- reactive 函数
