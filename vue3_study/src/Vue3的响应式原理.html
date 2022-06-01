@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue3的响应式原理</title>
+</head>
+<body>
+
+</body>
+<script>
+    // 源数据
+    let role = {
+        name: "Gnar",
+        age: 9
+    }
+
+    const r = new window.Proxy(role,{
+        // 有人读取r的属性时调用
+        get(target, propName) {
+            console.log(target);
+            console.log("有人读取了r身上的" + propName + "属性");
+            /**
+             * target 是源数据 这里只有name和age
+             * target里面没有propname  所以是undefined
+             * 所以要用[propname]的形式  这样的话  propname就会被成变量来解析
+             */
+            return target[propName];
+        },
+        // 有人增加或修改r的属性时调用
+        set(target, propName, value) {
+            console.log(`有人修改了r身上的${propName}属性，新值为:${value}`);
+            console.log("target[propName]" , target[propName]);
+            target[propName] = value;
+        },
+        // 有人删除r的属性时调用
+        deleteProperty(target, propName) {
+            console.log(`有人要删除r上的属性${propName}`);
+            return delete target[propName];
+        }
+    });
+
+    // 模拟Vue2中的响应式
+    /*let r = {}
+    Object.defineProperty(r,"name",{
+        get(){  // 有人读取name属性时调用
+            return role.name;
+        },
+        set(newName){
+            console.log("有人修改了name属性，准备更新页面");
+            role.name = newName;
+        }
+    });
+    Object.defineProperty(r,"age",{
+        get(){  // 有人读取name属性时调用
+            return role.age;
+        },
+        set(newName){
+            console.log("有人修改了name属性，准备更新页面");
+            role.age = newName;
+        }
+    })*/
+</script>
+</html>

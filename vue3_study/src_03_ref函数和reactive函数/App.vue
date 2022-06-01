@@ -1,12 +1,9 @@
 <template>
     <h1>角色信息</h1>
     <h2>姓名:{{role.name}}</h2>
-    <h2 v-show="role.level">等级:{{role.level}}</h2>
+    <h2>等级:{{role.level}}</h2>
     <h2>位置:{{role.role_info.job}}</h2>
-    <h2 v-show="role.sex">性别:{{role.sex}}</h2>
     <h2>是一只{{role.role_info.age}}岁的{{role.role_info.type.name}}</h2>
-    <button @click="addSex">添加一个sex属性</button>
-    <button @click="delLevel">删除熟练度等级</button>
     <ul>
         <li v-for="(hobby,index) in role.hobbies" :key="index">{{hobby}}</li>
     </ul>
@@ -18,6 +15,20 @@ import {ref,reactive} from 'vue';
 export default {
     name: 'App',
     setup(){
+        // 数据
+        // 麻烦的写法，直接使用reactive包裹对象
+        /*let name = ref("千珏")
+        let level = ref(5)
+        let role_info = reactive({
+            job: "打野",
+            age: 1500,
+            type: {
+                name: "射手",
+                ename: "ADC"
+            }
+        })
+        let hobbies = reactive(["陪狼说话","唱歌","捉迷藏"]);*/
+
         let role = reactive({
             name: "千珏",
             level: 5,
@@ -32,29 +43,35 @@ export default {
             hobbies: ["陪狼说话","唱歌","捉迷藏"]
         })
 
-        function addSex(){
-            role.sex = "女";
-        }
-
-        function delLevel(){
-            delete(role.level);
-        }
-
         function sayHello(){
             alert(`我叫${name},你也可以叫我${level},我已经${age}岁了哦,我们的熟练等级是：${this.level}`);
             console.log(this.showInfo());
         }
 
         function changeInfo(){
+            // name.value = "永猎双子";
+            // level.value = 7;
+            // console.log(role_info);
+            // role_info.job = "乱斗";
+            // role_info.type.name = "灵魂猎人";
             role.hobbies[0] = "陪我和狼说话";
+            // ref 版修改
+            // role_info.value.job = "大乱斗";
+            // role_info.value.type.name = "猎人";
         }
 
         return {
             role,
             sayHello,
             changeInfo,
-            addSex,
-            delLevel
+
+
+            /*name,
+            level,
+            sayHello,
+            changeInfo,
+            role_info,
+            hobbies*/
         }
     }
 }
