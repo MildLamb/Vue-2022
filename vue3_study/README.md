@@ -44,3 +44,59 @@ Object.defineProperty(data,"prop",{
 - 存在问题：
   - 新增属性。删除属性，界面不会更新
   - 直接通过下标修改数据，界面不会自动更新
+
+## Vue3的响应式
+- 实现原理：
+  - 通过Proxy(代理)：拦截对象中任意属性的变化，包括：属性值的读写，属性的添加，删除等
+  - 通过Reflect(反射)：对被代理对象的属性进行操作
+```text
+    const r = new window.Proxy(role,{
+        // 有人读取r的属性时调用
+        get(target, propName) {
+            console.log(target);
+            console.log("有人读取了r身上的" + propName + "属性");
+            /**
+             * target 是源数据 这里只有name和age
+             * target里面没有propname  所以是undefined
+             * 所以要用[propname]的形式  这样的话  propname就会被成变量来解析
+             */
+            // return target[propName];
+            return Reflect.get(target,propName);
+        },
+        // 有人增加或修改r的属性时调用
+        set(target, propName, value) {
+            console.log(`有人修改了r身上的${propName}属性，新值为:${value}`);
+            console.log("target[propName]" , target[propName]);
+            // target[propName] = value;
+            Reflect.set(target,propName,value);
+        },
+        // 有人删除r的属性时调用
+        deleteProperty(target, propName) {
+            console.log(`有人要删除r上的属性${propName}`);
+            // return delete target[propName];
+            Reflect.deleteProperty(target,propName);
+        }
+    });
+```
+
+## reactive对比ref
+- 从定义数据角度对比：
+  - ref用来定义：基本数据类型数据
+  - reactive用来定义：对象(或数组)类型数据
+  - 备注：ref也可以用来定义对象(或数组)类型数据，它内部会自动通过reactive转为代理对象
+- 从原理角度对比：
+  - ref通过Object.defineProperty()的get和set来实现响应式(数据劫持)
+  - reactive通过使用Proxy来实现响应式(数据劫持)，并通过Reflect操作源对象内部的数据
+- 从使用角度对比：
+  - ref定义的数据：操作数据需要.value，读取数据时页面模板中直接读取不需要.value
+  - reactive定义的数据：操作数据和读取数据：都不需要.value
+
+## setup的两个注意点
+- setup执行的时机
+  - 在beforeCreate之前执行一次，this是undefined
+- setup的参数
+  - props：值为对象，包含：组件外部传递过来，且组件内部声明接收了的属性
+  - context：上下文对象
+    - attrs：值为对象，包含：组件外部传递过来，但没有在props配置中声明接收的属性，相当于this.$attrs
+    - slots：收到的插槽内容，相当于this.$slots
+    - emit：分发自定义事件的函数，相当于this.$emit

@@ -14,6 +14,7 @@
         age: 9
     }
 
+
     const r = new window.Proxy(role,{
         // 有人读取r的属性时调用
         get(target, propName) {
@@ -24,18 +25,21 @@
              * target里面没有propname  所以是undefined
              * 所以要用[propname]的形式  这样的话  propname就会被成变量来解析
              */
-            return target[propName];
+            // return target[propName];
+            return Reflect.get(target,propName);
         },
         // 有人增加或修改r的属性时调用
         set(target, propName, value) {
             console.log(`有人修改了r身上的${propName}属性，新值为:${value}`);
             console.log("target[propName]" , target[propName]);
-            target[propName] = value;
+            // target[propName] = value;
+            Reflect.set(target,propName,value);
         },
         // 有人删除r的属性时调用
         deleteProperty(target, propName) {
             console.log(`有人要删除r上的属性${propName}`);
-            return delete target[propName];
+            // return delete target[propName];
+            Reflect.deleteProperty(target,propName);
         }
     });
 
