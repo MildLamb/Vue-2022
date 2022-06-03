@@ -12,13 +12,29 @@
 </template>
 
 <script>
-import {ref,watch,reactive,watchEffect} from "vue";
+import {ref,watch,reactive} from "vue";
 export default {
     name: "Demo",
+    /*  Vue2 的监视属性
+    watch: {
+        // 简写形式
+        /!*sum(newV,oldV){
+            console.log("sum的值变了");
+        }, *!/
+
+        // 完整写法
+        /!*sum: {
+            handler(newV,oldV){
+                console.log("sum的值变化了")
+            },
+            immediate: true,
+            deep: true
+        }*!/
+    },*/
     setup(){
         let sum = ref(0);
         let msg = ref("你好呀!");
-        let role = reactive({
+        let role = ref({
             name: "千珏",
             age: 1500,
             job: {
@@ -31,16 +47,13 @@ export default {
             }
         })
 
-/*        watch(sum,(newV,oldV)=>{
+        watch(sum,(newV,oldV)=>{
             console.log("sum的值变化了",newV,oldV);
-        })*/
-
-        watchEffect(()=>{
-            const x = sum.value;
-            const x2 = role.job.type1.name;
-            console.log("watchEffect所指定的回调调用了");
         })
 
+        watch(role,(newV,oldV)=>{
+            console.log("role的值变化了",newV,oldV);
+        },{deep: true})
 
 
         return {

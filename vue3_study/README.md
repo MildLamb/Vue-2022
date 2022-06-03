@@ -100,3 +100,60 @@ Object.defineProperty(data,"prop",{
     - attrs：值为对象，包含：组件外部传递过来，但没有在props配置中声明接收的属性，相当于this.$attrs
     - slots：收到的插槽内容，相当于this.$slots
     - emit：分发自定义事件的函数，相当于this.$emit
+
+
+## Vue3 watch函数
+- 两个小坑：
+  - 监视reactive定义的响应式数据时：oldValue无法正确获取，强制开启了深度监视(deep配置失效)
+  - 监视reactive定义的响应式数据中某个属性时(是对象)，deep配置有效
+```text
+        // 情况一：监视ref所定义的一个响应式数据
+        /*watch(sum,(newV,oldV)=>{
+            console.log("sum的值变化了，新值为：" + newV + ",旧值为：" + oldV);
+        },{immediate: true,deep: true})*/
+
+        // 情况二：监视ref所定义的多个响应式数据
+        /*watch([sum,msg],(newV,oldV)=>{
+            console.log("sum的值变化了" ,newV ,oldV);
+        })*/
+
+        // 情况三：监视reactive定义的一个响应式数据的全部属性
+        /**
+         * 注意：
+         *  1. 此处无法正确的获取oldV的值，原因可能是对象监视的是地址值
+         *  2. 强制开启了深度监视  {deep: true} 无效
+         */
+/*        watch(role,(newV,oldV)=>{
+            console.log("role变化了",newV,oldV);
+        })*/
+
+        // 情况四：监视reactive所定义的一个响应式数据中的某一个属性
+        /*watch(()=>role.age,(newV,oldV)=>{
+            console.log("role的年龄变化了",newV,oldV);
+        })*/
+
+
+        // 情况五：监视reactive所定义的一个响应式数据中的某些属性
+/*        watch([()=>role.age,()=>role.name],(newV,oldV)=>{
+            console.log("role的年龄变化了",newV,oldV);
+        })*/
+
+        // 特殊情况：监视reactive所定义的一个响应式数据中的某个深度对象中的属性
+        watch(()=>role.job,(newV,oldV)=>{
+            console.log("role的年龄变化了",newV,oldV);
+        },{deep:true})
+```
+
+## watchEffect函数
+- watch的套路是：既要指明监视的属性，也要指明监视的回调
+- watchEffect的套路是：不用指明监视哪个属性，监视的回调中用到了哪些属性，那就监视哪些属性
+- watchEffect有点像computed：
+  - 但computed注重计算出来的值(回调函数的返回值)，所以必须要写返回值
+  - 而watchEffect更注重的是过程(回调函数的函数体)，所以不用写返回值
+```text
+watchEffect(()=>{
+    const x = sum.value;
+    const x2 = role.job.type1.name;
+    console.log("watchEffect所指定的回调调用了");
+})
+```
