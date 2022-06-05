@@ -1,26 +1,26 @@
-import Vue from "vue";
-import App from "./App";
-// // 引入ElementUI组件库
-// import ElementUI from "element-ui";
-// // 引入ElementUI全部样式
-// import "element-ui/lib/theme-chalk/index.css";
+// 引入Vue
+import Vue from 'vue'
+// 引入App组件
+import MyApp from './App.vue'
 
-// 按需引用部分组件
-import {Button,DatePicker} from "element-ui";
+/**
+ * 插件要在Vue实例对象创建之前先引入
+ */
+import plugins from "./plugins";
 
 Vue.config.productionTip = false;
 
-// 使用ElementUI
-// Vue.use(ElementUI);
+// 全局混入
+/*import {mixMethods,myData} from "./mixin.js";
+Vue.mixin(mixMethods);
+Vue.mixin(myData);*/
 
-// 注册全局组件
-Vue.component("El_Button",Button);
-Vue.component("El_DatePicker",DatePicker);
 
-new Vue({
-    el: "#container",
-    components: {
-        App
-    },
-    render: h => h(App),
-});
+// 使用插件
+Vue.use(plugins);
+
+
+// 创建Vue实例
+const vm = new Vue({
+    render: h => h(MyApp)
+}).$mount("#container");
