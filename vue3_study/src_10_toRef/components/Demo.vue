@@ -1,6 +1,4 @@
 <template>
-    <h3>当前num的值为：{{num.x}}</h3>
-    <button @click="num.x++">点击num++</button>
     <h2>姓名：{{name}}</h2>
     <h2>年龄：{{age}}</h2>
     <h2>位置：{{job.type1.name}}</h2>
@@ -10,15 +8,11 @@
 </template>
 
 <script>
-import {reactive, toRef, toRefs, shallowReactive, ref,shallowRef} from "vue";
+import {reactive,toRef,toRefs} from "vue";
 export default {
     name: "Demo",
     setup(){
-        /**
-         * shallowReactive 不考虑深层的响应式
-         */
-        // let role = shallowReactive({
-         let role = reactive({
+        let role = reactive({
             name: "千珏",
             age: 1500,
             job: {
@@ -31,13 +25,6 @@ export default {
             }
         })
 
-        // let num = ref(1)
-        // shallowRef 不处理对象的响应式
-        let num = shallowRef({
-            x: 0
-        })
-        console.log(num)
-
 /*
         const name1= role.name;
         console.log(name1);
@@ -48,11 +35,11 @@ export default {
          * param2 获取哪个属性
          */
         const name2 = toRef(role,'name');
-        // console.log(name2);
+        console.log(name2);
 
 
         const a_Role = toRefs(role);
-        // console.log(a_Role);
+        console.log(a_Role);
 
         return {
             // toRef写法
@@ -61,8 +48,7 @@ export default {
             jobName: toRef(role.job.type1,"name")*/
 
             // toRefs写法
-            ...toRefs(role),
-            num
+            ...toRefs(role)
         }
     }
 }
