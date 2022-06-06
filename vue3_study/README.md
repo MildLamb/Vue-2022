@@ -321,10 +321,74 @@ watchEffect(()=>{
 - 应用：要将响应式对象中的某个属性单独提供给外部使用时
 - 扩展：toRefs与toRef功能一致，但可以批量创建多个ref对象，语法：toRefs(role)
 
-# 其他Composition API
-1. shallowReactive与shallowRef
-    - shallowReactive：只处理对象最外层属性的响应式(浅响应式)
-    - shallowRef：只处理基本数据类型的响应式，不进行对象类型的响应式处理
-    - 什么时候用?
-      - 如果有一个对象数据，结构比较深，但变化时只是外层属性变化 ==> shallowReactive
-      - 如果有一个对象数据，后续功能不会修改该对象中的属性，而是生成新对象进行替换
+## 其他Composition API
+### shallowReactive与shallowRef
+- shallowReactive：只处理对象最外层属性的响应式(浅响应式)
+- shallowRef：只处理基本数据类型的响应式，不进行对象类型的响应式处理
+- 什么时候用?
+  - 如果有一个对象数据，结构比较深，但变化时只是外层属性变化 ==> shallowReactive
+  - 如果有一个对象数据，后续功能不会修改该对象中的属性，而是生成新对象进行替换
+
+### readonly与shallowReadonly
+- readonly：让一个响应式数据变为只读的(深只读)
+- shallowReadonly：让一个响应式数据变为只读的(浅只读)
+- 应用场景：不希望数据被修改时
+
+### toRaw 与 markRaw
+- toRaw:
+  - 作用：将一个由reactive生成的响应式对象转为普通对象
+  - 应用场景：用于读取响应式对象对应的普通对象，对这个普通对象的所有操作，不会引起页面的更新
+- markRaw:
+  - 作用：标记一个对象，使其永远不会再成为响应式对象
+  - 应用场景：
+    1. 有些值不应该设置为响应式的，例如复杂的第三方库等
+    2. 当渲染具有不可变数据源的大列表时，跳过响应式转换可以提高性能
+
+### customRef 自定义 ref
+- 作用：创建一个自定义的ref，并对其依赖项跟踪和更新触发进行显式控制
+```text
+<template>
+    <input type="text" v-model="keyWord">
+    <h2>{{keyWord}}</h2>
+</template>
+
+<script>
+import {customRef} from 'vue';
+export default {
+    name: "App",
+    setup(){
+        // 自定义一个ref，名为：myRef
+        let timer;
+        function myRef(data,delay){
+            return customRef((track, trigger)=>{
+                return {
+                    get(){
+                        // console.log(`有人从自定义的myRef中获取数据了，我把${data}这个名字给它了`);
+                        /**
+                         * 通知Vue追踪返回的数据的变化 ，这里就是追踪data的变化
+                         */
+                        track();
+                        return data;
+                    },
+                    set(newV){
+                        console.log(`有人把自定义的myRef中的数据修改了，${newV}是它的新值`);
+                        clearTimeout(timer);
+                        timer = setTimeout(()=>{
+                            data = newV;
+                            trigger();   // 通知Vue重新解析模板
+                        },delay)
+                    }
+                }
+            })
+        }
+
+        let keyWord = myRef("kindred",500);
+        return {keyWord};
+    }
+}
+</script>
+
+<style>
+
+</style>
+```
