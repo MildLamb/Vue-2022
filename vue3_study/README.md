@@ -11,7 +11,7 @@
       1. Vue2配置(data,methods,computed...)中可以访问到setup中的属性，方法
       2. 但在setup中不能访问到Vue2配置(data,methods,computed)
       3. 如果有重名，存在覆盖
-   2. setup不能是一个async函数，因为返回值不再是return的对象，而是promise，模板看不到return对象中的属性
+   2. setup不能是一个async函数，因为返回值不再是return的对象，而是promise，模板看不到return对象中的属性.(后期也可以返回一个Promise实例，但需要Suspense和异步组件引入的支持)
 
 ## ref函数
 1. 作用：定义一个响应式的数据
@@ -432,3 +432,51 @@ setup(){
 - isReactive：检查一个对象是否由reactive创建的响应式代理
 - isReadonly：检查一个对象是否由readonly创建的只读
 - isProxy：检查一个对象是否由reactive或者readonly方法创建代理
+
+## Composition API的优势
+1. Options API存在的问题
+- 使用传统OptionsAPI，新增或者修改一个需求，就需要分别在data，methods，computed里修改
+
+2. Composition API的优势
+- 我们可以更加优雅的组织我们的代码，函数。让相关功能的代码更加有序的组织在一起
+
+## 新的组件
+### Fragment
+- 在Vue2中：组件必须有一个根标签
+- 在Vue3中：组件可以没有根标签，内部会将多个标签包含在一个Fragment虚拟元素中
+- 好处：减少标签层级，减少内存占用
+
+### Teleport
+- 什么是Teleport? ———— Teleport是一种能够将我们的组件html结构移动到指定位置的技术
+```text
+<!-- 传送走某一块 to的目标还可以是 css选择器 -->
+        <teleport to="body">
+            <div v-if="isShow" class="mask">
+                <div class="dialog">
+                    <h3>我是一个弹窗</h3>
+                    <button @click="isShow = false">关闭弹窗</button>
+                </div>
+            </div>
+        </teleport>
+```
+
+### Suspense
+- 等待异步组件时渲染一些额外内容，让应用有更好的用户体验
+- 使用步骤
+  - 异步引入组件
+```text
+// 引入异步组件
+import {defineAsyncComponent} from "vue";
+const Son = defineAsyncComponent(()=>import("@/components/Son"))  // 动态，异步引入
+```
+  - 使用Suspense包裹组件，并配置好default和fallback插槽
+```text
+<Suspense>
+    <template v-slot:default>
+        <Son></Son>
+    </template>
+    <template v-slot:fallback>
+        <h3>Loading...</h3>
+    </template>
+</Suspense>
+```
