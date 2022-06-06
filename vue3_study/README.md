@@ -329,12 +329,12 @@ watchEffect(()=>{
   - 如果有一个对象数据，结构比较深，但变化时只是外层属性变化 ==> shallowReactive
   - 如果有一个对象数据，后续功能不会修改该对象中的属性，而是生成新对象进行替换
 
-### readonly与shallowReadonly
-- readonly：让一个响应式数据变为只读的(深只读)
-- shallowReadonly：让一个响应式数据变为只读的(浅只读)
+### readonly与shallowReadonly (和下面的markRaw对不，用readonly，连修改的资格都没有)
+- readonly：让一个响应式数据变为只读的(深只读)(数据压根就不能改)
+- shallowReadonly：让一个响应式数据变为只读的(浅只读，只考虑对象的第一层属性)
 - 应用场景：不希望数据被修改时
 
-### toRaw 与 markRaw
+### toRaw 与 markRaw (和上面的对比，markRaw只是让数据失去响应式，数据还是变化了)
 - toRaw:
   - 作用：将一个由reactive生成的响应式对象转为普通对象
   - 应用场景：用于读取响应式对象对应的普通对象，对这个普通对象的所有操作，不会引起页面的更新
@@ -392,3 +392,43 @@ export default {
 
 </style>
 ```
+
+### 祖孙组件通信 provide 和 inject
+- 作用：实现祖孙组件间通信
+- 套路：祖组件有一个provide选项来提供数据，后代组件有一个inject选项来注入数据
+- 具体写法：
+  - 祖组件中
+```text
+setup(){
+        let role = reactive({
+            name: "kindred",
+            age: 1500
+        });
+
+        /**
+         * param1 给提供的数据起一个名字
+         * param2 需要提供的数据
+         */
+        provide("my_role",role);
+
+        return {
+            ...toRefs(role)
+        };
+    }
+```
+  - 孙组件中
+```text
+setup(){
+        let role_age = inject("my_role");
+
+        return {
+            role_age
+        }
+    }
+```
+
+### 响应式数据的判断
+- isRef:检查一个值是否为一个ref对象
+- isReactive：检查一个对象是否由reactive创建的响应式代理
+- isReadonly：检查一个对象是否由readonly创建的只读
+- isProxy：检查一个对象是否由reactive或者readonly方法创建代理

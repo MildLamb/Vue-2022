@@ -1,34 +1,32 @@
 <template>
     <div class="app">
         <h2>我是App组件(祖).{{name}} --- {{age}}岁</h2>
+        <Son></Son>
     </div>
 </template>
 
 <script>
-import {reactive, toRefs, provide, ref, readonly, isRef, isReactive, isReadonly, isProxy, shallowReadonly} from "vue";
+import Son from "@/components/Son";
+import {reactive, toRefs,provide} from "vue";
 export default {
     name: "App",
+    components: {
+        Son
+    },
     setup(){
         let role = reactive({
             name: "kindred",
             age: 1500
         });
 
-        let num = ref(127);
-
-        let role2 = shallowReadonly(role);
-
         /**
          * param1 给提供的数据起一个名字
          * param2 需要提供的数据
          */
         provide("my_role",role);
-        console.log(isReadonly(role2));
 
         return {
-            ...toRefs(role),
-            num,
-            role2
+            ...toRefs(role)
         };
     }
 }
