@@ -26,8 +26,13 @@ export default {
     },
     setup(){
         const customEvent = (data) => {
+            console.log("this",this);  // undefined
             alert(data);
         }
+
+/*        function customEvent(data){
+            alert(data);
+        }*/
 
         return {
             customEvent
