@@ -14,6 +14,11 @@ npm install -g @vue/cli@4.5.13
 npm view @vue/cli versions
 ```
 
+- 初始化vue项目
+```text
+vue init webpack appname
+```
+
 ## 脚手架文件结构
 ```text
 |—— node_modules  

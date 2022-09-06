@@ -30,7 +30,8 @@
             5. Vue.config.keyCodes.自定义键名 = 键码，可以去定制按键别名
          -->
         <h2>欢迎来到，{{local}}</h2>
-        <input type="text" placeholder="按下回车提示信息" @keydown.tab="showInfo" value="">
+        <!--@keyup.enter="showInfo"--><!-- 回车 -->
+        <input type="text" placeholder="按下tab提示信息"  @keydown.tab="showInfo" value="">
     </div>
 </body>
 <script>
